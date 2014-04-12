@@ -11,10 +11,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = SimilarityGraphs
 TEMPLATE = app
 
+LIBS+= -std=gnu++11
+
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    corpus.cpp
 
-HEADERS  += mainwindow.h
+
+HEADERS  += mainwindow.h \
+    corpus.h
 
 FORMS    += mainwindow.ui
+

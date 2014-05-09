@@ -59,12 +59,10 @@ void Preprocesor::removeHtmlTags()
 
 void Preprocesor::removeUrls()
 {
-    const regex rgx_url("((https?|s?ftp|ssh|):\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$");
+    const regex rgx_url("((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\?\?(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)");
     string blank("");
 
     fullText=regex_replace(fullText,rgx_url,blank);
-
-    cout<<fullText<<endl;
 
 }
 
@@ -77,8 +75,6 @@ void Preprocesor::removePunctiationMarks()
 
     fullText=regex_replace(fullText,rgx_punctiation,blank);
 
-    cout<<fullText<<endl;
-
 }
 
 void Preprocesor::removeStopWords(int language)
@@ -88,10 +84,17 @@ void Preprocesor::removeStopWords(int language)
 
 void Preprocesor::removeNumbers()
 {
+    const regex rgx_numbers("(\\+|-)?[0-9]*(\\.([0-9][0-9]*)?)?((E|e)(\\+|-)?[0-9]+)?");
+    string blank("");
+
+
+    fullText=regex_replace(fullText,rgx_numbers,blank);
 
 }
 
 void Preprocesor::toLower()
 {
+
+    transform(fullText.begin(), fullText.end(), fullText.begin(), ::tolower);
 
 }

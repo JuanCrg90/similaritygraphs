@@ -18,6 +18,7 @@
 #include <string>
 #include <string.h>
 #include <iterator>
+#include <algorithm>
 #include <boost/regex.hpp>
 
 

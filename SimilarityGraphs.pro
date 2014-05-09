@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = SimilarityGraphs
 TEMPLATE = app
 
+LIBS+= -std=gnu++11
+
 
 LIBS+= -lboost_regex
 
@@ -26,6 +28,9 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     corpus.h \
     preprocesor.h
+    corpus.cpp
+
+
 
 FORMS    += mainwindow.ui
 

@@ -1,9 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "corpus.h"
-
 #include "preprocesor.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +11,6 @@ int main(int argc, char *argv[])
     w.show();
 
     return a.exec();*/
-
 
 
 /*
@@ -39,6 +36,9 @@ int main(int argc, char *argv[])
 
     cout<<"Punctuacion"<<endl;
     test.removePunctiationMarks();
+
+
+
 
 
 

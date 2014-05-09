@@ -1,10 +1,11 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "corpus.h"
-
+<<<<<<< HEAD
 #include "preprocesor.h"
 
-
+=======
+>>>>>>> 5e494dc2c34c42310b8c9bae03aae40ced4d39d4
 int main(int argc, char *argv[])
 {
     /*
@@ -15,7 +16,7 @@ int main(int argc, char *argv[])
     return a.exec();*/
 
 
-
+<<<<<<< HEAD
 /*
     Corpus prueba;
     prueba.setText(" &lt;br /&gt; ");
@@ -39,6 +40,18 @@ int main(int argc, char *argv[])
 
     cout<<"Punctuacion"<<endl;
     test.removePunctiationMarks();
+=======
+
+
+    Corpus prueba;
+    prueba.setText("Los Gatos Se Comen a Los Ratones y Los osos Comen peces ");
+    prueba.generateFrecuencyTable();
+    prueba.showText();
+    prueba.showFrecuencyTable();
+>>>>>>> 5e494dc2c34c42310b8c9bae03aae40ced4d39d4
+
+
+
 
 
 

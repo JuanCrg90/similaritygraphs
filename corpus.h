@@ -39,6 +39,11 @@ private:
     const string tags = " ,.;:?!#\"()\n\t";
 
     /**
+     * @brief corpus name
+     */
+    string name;
+
+    /**
      * @brief text to handle
      */
     string fullText;
@@ -56,11 +61,15 @@ public:
      */
     Corpus();
 
+
     /**
-     * @brief Corpus constructor
+     * @brief Corpus construcctor
+     * @param name
      * @param fullText
      */
-    Corpus(string fullText);
+
+    Corpus(string name,string fullText);
+
 
     /**
      * @brief setText

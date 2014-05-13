@@ -3,7 +3,9 @@
 
 Corpus::Corpus() {}
 
-Corpus::Corpus(string fullText): fullText(fullText){}
+
+Corpus::Corpus(string name, string fullText):name(name),fullText(fullText){}
+
 
 void Corpus::setText(string fullText)
 {
@@ -14,6 +16,7 @@ string Corpus::getText()
 {
     return this->fullText;
 }
+
 
 bool Corpus::generateFrecuencyTable()
 {

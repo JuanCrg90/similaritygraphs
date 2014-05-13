@@ -53,8 +53,6 @@ private:
     string fullText;
 
 
-
-
 public:
 
     /**

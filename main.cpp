@@ -25,8 +25,16 @@ int main(int argc, char *argv[])
 */
 
 
+    vector<string> stopWords;
+
+    stopWords.push_back("el");
+    stopWords.push_back("los");
+    stopWords.push_back("en");
+    stopWords.push_back("por");
+
+
     Preprocesor test;
-    test.setText("220 &lt;a href=\"http://en.pan.netcom/go/out/url=http%3A%2F%2Fwww.comptiaking.com\"target=\"_blank\" rel=\"nofollow\"&gt;;http://www.comptiaking.com&lt;/a&gt; AAASSEFDSDFDFSFGDF 290 ººº");
+    test.setText("Casa #225 en el camion 23 de el emperador corre por los prados");
 
     cout<<test.getText()<<endl;
     cout<<"tags html"<<endl;
@@ -51,7 +59,14 @@ int main(int argc, char *argv[])
     cout<<test.getText()<<endl;
 
 
+    Corpus prueba;
+    prueba.setText(test.getText());
+    prueba.generateFrecuencyTable();
+    prueba.showText();
+    prueba.showFrecuencyTable();
 
+    prueba.removeStopWords(stopWords);
 
+prueba.showFrecuencyTable();
 
 }

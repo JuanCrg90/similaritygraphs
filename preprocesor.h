@@ -89,15 +89,11 @@ public:
      */
     void removeUrls();
 
-
-    void removePunctiationMarks();
-
     /**
-     * @brief removeStopWords
-     * @param language 1 Spanish, 2 English std, 3 English Long
+     * @brief removePunctiationMarks
      */
 
-    void removeStopWords(int language);
+    void removePunctiationMarks();
 
     /**
      * @brief removeNumbers

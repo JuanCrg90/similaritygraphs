@@ -77,11 +77,6 @@ void Preprocesor::removePunctiationMarks()
 
 }
 
-void Preprocesor::removeStopWords(int language)
-{
-
-}
-
 void Preprocesor::removeNumbers()
 {
     const regex rgx_numbers("(\\+|-)?[0-9]*(\\.([0-9][0-9]*)?)?((E|e)(\\+|-)?[0-9]+)?");

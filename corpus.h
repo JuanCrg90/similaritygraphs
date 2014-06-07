@@ -89,6 +89,10 @@ public:
      */
     bool generateFrecuencyTable();
 
+
+    void removeStopWords(vector<string> stopW);
+
+
     /**
      * @brief showText
      */

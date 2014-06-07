@@ -57,6 +57,27 @@ bool Corpus::generateFrecuencyTable()
 
 }
 
+void Corpus::removeStopWords(vector<string> stopW)
+{
+    std::map<string,int>::iterator it;
+
+    for(unsigned int i=0;i<stopW.size();i++)
+    {
+
+        it=frecuencyTable.find(stopW[i]);
+
+        if(it!=frecuencyTable.end())
+        {
+            frecuencyTable.erase(it);
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+}
+
 void Corpus::showText()
 {
     cout<<"----------------------------"<<endl;

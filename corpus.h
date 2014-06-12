@@ -99,6 +99,20 @@ public:
     void showText();
 
     /**
+     * @brief setFrecuencyTable
+     * @param frecuencyTable
+     */
+    void setFrecuencyTable(map<string,int> frecuencyTable);
+
+    /**
+     * @brief getFrecuencyTable
+     * @return map<string,int>
+     */
+    map<string,int> getFrecuencyTable();
+
+
+
+    /**
      * @brief showFrecuencyTable
      */
     void showFrecuencyTable();

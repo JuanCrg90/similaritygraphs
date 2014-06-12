@@ -22,12 +22,14 @@ QMAKE_CXXFLAGS += -std=c++0x
 SOURCES += main.cpp\
         mainwindow.cpp \
     corpus.cpp \
-    preprocesor.cpp
+    preprocesor.cpp \
+    corpora.cpp
 
 
 HEADERS  += mainwindow.h \
     corpus.h \
-    preprocesor.h
+    preprocesor.h \
+    corpora.h
     corpus.cpp
 
 

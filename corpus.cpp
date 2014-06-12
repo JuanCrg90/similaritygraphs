@@ -86,6 +86,17 @@ void Corpus::showText()
     cout<<"----------------------------"<<endl;
 }
 
+void Corpus::setFrecuencyTable(map<string, int> frecuencyTable)
+{
+    this->frecuencyTable.clear();
+    this->frecuencyTable=frecuencyTable;
+}
+
+map<string, int> Corpus::getFrecuencyTable()
+{
+    return this->frecuencyTable;
+}
+
 void Corpus::showFrecuencyTable()
 {
     std::map<string,int>::iterator it;

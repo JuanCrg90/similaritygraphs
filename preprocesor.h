@@ -91,6 +91,7 @@ public:
 
     /**
      * @brief removePunctiationMarks
+     * [^\w\sáéíóúñ]
      */
 
     void removePunctiationMarks();

@@ -69,7 +69,7 @@ void Preprocesor::removeUrls()
 void Preprocesor::removePunctiationMarks()
 {
 
-    const regex rgx_punctiation("[^\\w\\s]");
+    const regex rgx_punctiation("[^\\w\\sáéíóúñ]");
     string blank(" ");
 
 

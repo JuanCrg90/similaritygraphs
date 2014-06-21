@@ -28,6 +28,18 @@ private:
      */
     Corpus global;
 
+    /**
+     * @brief diceMetric
+     * $$2\dfrac{a*b}{a+b}$$
+     * @param a
+     * @param b
+     * @return
+     */
+    float diceMetric(int a, int b);
+
+
+
+
 public:
     Corpora();
 
@@ -50,6 +62,13 @@ public:
     void addCorpus(Corpus corp);
 
     /**
+     * @brief remove the words in each map under the threshold
+     * @param th
+     */
+    void threshold(int th);
+
+
+    /**
      * @brief balance the corpus with the same words
      */
     void balance();
@@ -60,7 +79,16 @@ public:
 
     void generateGlobal();
 
+    /**
+     * @brief getGlobal corpus Map
+     * @return
+     */
     Corpus getGlobal();
+
+
+    vector < vector<float> > GenerateDiceMatrix();
+
+
 
 
 

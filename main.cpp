@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include "document.h"
 #include "corpora.h"
 
 
@@ -61,11 +62,11 @@ int main(int argc, char *argv[])
 
 */
 
-    Corpus prueba1;
-    Corpus prueba2;
-    Corpus prueba3;
+    Document prueba1;
+    Document prueba2;
+    Document prueba3;
 
-    prueba1.setText("el gato en el establo bebe leche");
+    prueba1.setText("el gato en el establo bebe leche todo el año");    
     prueba1.generateFrecuencyTable();
     prueba1.showText();
     prueba1.showFrecuencyTable();
@@ -76,32 +77,10 @@ int main(int argc, char *argv[])
     prueba2.showText();
     prueba2.showFrecuencyTable();
 
-    prueba3.setText("pepe pecas pica papas");
+    prueba3.setText("pepe pepe pecas pica papas en el carro");
     prueba3.generateFrecuencyTable();
     prueba3.showText();
     prueba3.showFrecuencyTable();
-
-
-
-
-    Corpora test;
-
-    test.addCorpus(prueba1);
-    test.addCorpus(prueba2);
-    test.addCorpus(prueba3);
-
-    cout<<"BALANCENADO"<<endl;
-    test.balance();
-    test.getCorpora().at(0).showFrecuencyTable();
-    test.getCorpora().at(1).showFrecuencyTable();
-    test.getCorpora().at(2).showFrecuencyTable();
-
-    cout<<"GLOBAL"<<endl;
-    test.generateGlobal();
-    test.getGlobal().showFrecuencyTable();
-
-
-
 
 
 

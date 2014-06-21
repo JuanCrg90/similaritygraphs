@@ -1,5 +1,15 @@
 #include "corpora.h"
 
+float Corpora::diceMetric(int a, int b)
+{
+    float dice;
+
+    dice= 2*float((a*b))/float(a+b);
+
+    return dice;
+
+}
+
 Corpora::Corpora()
 {
 }
@@ -23,6 +33,31 @@ void Corpora::addCorpus(Corpus corp)
     this->corpora.push_back(corp);
 
 }
+
+void Corpora::threshold(int th)
+{
+    map<string,int> corp;
+    std::map<string,int>::iterator it;
+
+    for(unsigned int i=0;i<corpora.size();i++)
+    {
+        corp=corpora[i].getFrecuencyTable();
+        it=corp.begin();
+
+        while(it!=corp.end())
+        {
+            if(it->second < th)
+            {
+                corp.erase(it);
+            }
+            it++;
+        }
+
+        corpora[i].setFrecuencyTable(corp);
+
+    }
+}
+
 
 void Corpora::balance()
 {
@@ -110,6 +145,25 @@ Corpus Corpora::getGlobal()
 {
     return global;
 }
+
+vector<vector<float> > Corpora::GenerateDiceMatrix()
+{
+    vector<vector<float> > result;
+
+    result.resize(corpora[0].getFrecuencyTable().size()*corpora.size());
+
+
+    cout<<result.size();
+
+
+
+
+
+
+}
+
+
+
 
 
 

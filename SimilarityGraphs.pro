@@ -23,13 +23,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     corpus.cpp \
     preprocesor.cpp \
-    corpora.cpp
+    corpora.cpp \
+    document.cpp
 
 
 HEADERS  += mainwindow.h \
     corpus.h \
     preprocesor.h \
-    corpora.h
+    corpora.h \
+    document.h
     corpus.cpp
 
 

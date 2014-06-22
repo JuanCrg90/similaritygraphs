@@ -3,111 +3,156 @@
 
 Corpus::Corpus() {}
 
-
-Corpus::Corpus(string name, string fullText):name(name),fullText(fullText){}
-
-
-void Corpus::setText(string fullText)
+void Corpus::setName(string name)
 {
-    this->fullText=fullText;
+    this->name=name;
 }
 
-string Corpus::getText()
+string Corpus::getName()
 {
-    return this->fullText;
+    return name;
 }
 
-
-bool Corpus::generateFrecuencyTable()
+void Corpus::addDocument(Document doc)
 {
+    this->corp.push_back(doc);
+}
+
+Document Corpus::getDocument(int index)
+{
+    return this->corp.at(index);
+}
+
+void Corpus::generateCorpusFrequencyTable()
+{
+    map<string,int> doci; //Tabla de Frecuencias del Corpus i
+    std::map<string,int>::iterator it1;
+    std::map<string,int>::iterator it2;
 
 
+    corpusFrequencyTable.clear();
 
-    if(!fullText.empty())
+    for(unsigned int i=0;i<corp.size();i++)
     {
+        doci = corp[i].getFrequencyTable();
 
-        std::map<string,int>::iterator it;
-        char *token;
-        char *dup = strdup(fullText.c_str());
+        it1=doci.begin();
 
-        token=strtok(dup,tags.c_str()) ;
-        while(token != NULL)
+        while(it1!=doci.end())
         {
-            it=frecuencyTable.find(token);
+            it2=corpusFrequencyTable.find(it1->first);
 
-            if(it!=frecuencyTable.end())
+
+            if(it2!=corpusFrequencyTable.end())
             {
-                it->second++;
+                //cout<<it1->first<<" Existe "<< it2->second<<endl;
+                it2->second+=it1->second;
+
             }
             else
             {
-                frecuencyTable.insert(pair<string,int> (token,1));
+                //cout<<it1->first<<" No Existe"<<endl;
+                corpusFrequencyTable.insert(pair<string,int> (it1->first,it1->second));
             }
-            token=strtok(NULL,tags.c_str());
+            it1++;
         }
 
-        free(dup);
 
-        return true;
-    }
-    else
-    {
-        return false;
     }
 
 }
 
-void Corpus::removeStopWords(vector<string> stopW)
+void Corpus::showCorpusFrequencyTable()
 {
     std::map<string,int>::iterator it;
-
-    for(unsigned int i=0;i<stopW.size();i++)
-    {
-
-        it=frecuencyTable.find(stopW[i]);
-
-        if(it!=frecuencyTable.end())
-        {
-            frecuencyTable.erase(it);
-        }
-        else
-        {
-            continue;
-        }
-    }
-
-}
-
-void Corpus::showText()
-{
-    cout<<"----------------------------"<<endl;
-    cout<<"Full Text:"<<endl;
-    cout<<fullText<<endl;
-    cout<<"----------------------------"<<endl;
-}
-
-void Corpus::setFrecuencyTable(map<string, int> frecuencyTable)
-{
-    this->frecuencyTable.clear();
-    this->frecuencyTable=frecuencyTable;
-}
-
-map<string, int> Corpus::getFrecuencyTable()
-{
-    return this->frecuencyTable;
-}
-
-void Corpus::showFrecuencyTable()
-{
-    std::map<string,int>::iterator it;
-    it=frecuencyTable.begin();
+    it=corpusFrequencyTable.begin();
 
     cout<<"----------------------------"<<endl;
-    cout<<"Frequency Table:"<<endl;
-    while(it!=frecuencyTable.end())
+    cout<<"Corpus Frequency Table:"<<endl;
+    while(it!=corpusFrequencyTable.end())
     {
         cout<<it->first<<" "<<it->second<<endl;
         it++;
     }
     cout<<"----------------------------"<<endl;
+
+
 }
+
+
+map<string, int> Corpus::getCorpusFrequencyTable() const
+{
+    return corpusFrequencyTable;
+}
+
+void Corpus::setCorpusFrequencyTable(const map<string, int> &value)
+{
+    corpusFrequencyTable = value;
+}
+
+void Corpus::balanceCorpus()
+{
+    map<string,int> doci; //Tabla de Frequencias del Corpus i
+    map<string,int> docj; //Tabla de Frequencias del Corpus j
+
+    std::map<string,int>::iterator it1;
+    std::map<string,int>::iterator it2;
+
+    for(unsigned int i=0;i<corp.size();i++)
+    {
+        doci = corp[i].getFrequencyTable();
+
+
+        for(unsigned int j=0;j<corp.size();j++)
+        {
+            docj = corp[j].getFrequencyTable();
+
+
+            it1=docj.begin();
+
+            //cout<<"Corpus "<<i<< " VS "<<j<<endl;
+
+            while(it1!=docj.end())
+            {
+                it2=doci.find(it1->first);
+
+                if(it2==doci.end())
+                {
+                    //cout<<it1->first<<" No Existe"<<endl;
+                    doci.insert(pair<string,int> (it1->first,0));
+                    corp[i].setFrequencyTable(doci);
+                }
+                else
+                {
+                    //cout<<it1->first<<" Existe"<<endl;
+                }
+                it1++;
+            }
+        }
+    }
+}
+
+void Corpus::threshold(int th)
+{
+    map<string,int> auxiliarCorp;
+    std::map<string,int>::iterator it;
+
+    for(unsigned int i=0;i<corp.size();i++)
+    {
+        auxiliarCorp=corp[i].getFrequencyTable();
+        it=auxiliarCorp.begin();
+
+        while(it!=auxiliarCorp.end())
+        {
+            if(it->second < th)
+            {
+                auxiliarCorp.erase(it);
+            }
+            it++;
+        }
+        corp[i].setFrequencyTable(auxiliarCorp);
+    }
+
+}
+
+

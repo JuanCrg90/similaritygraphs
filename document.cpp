@@ -6,6 +6,16 @@ Document::Document() {}
 
 Document::Document(string name, string fullText):name(name),fullText(fullText){}
 
+void Document::setName(string name)
+{
+    this->name=name;
+}
+
+string Document::getName()
+{
+    return name;
+}
+
 
 void Document::setText(string fullText)
 {
@@ -18,7 +28,7 @@ string Document::getText()
 }
 
 
-bool Document::generateFrecuencyTable()
+bool Document::generateFrequencyTable()
 {
 
 
@@ -33,15 +43,15 @@ bool Document::generateFrecuencyTable()
         token=strtok(dup,tags.c_str()) ;
         while(token != NULL)
         {
-            it=frecuencyTable.find(token);
+            it=frequencyTable.find(token);
 
-            if(it!=frecuencyTable.end())
+            if(it!=frequencyTable.end())
             {
                 it->second++;
             }
             else
             {
-                frecuencyTable.insert(pair<string,int> (token,1));
+                frequencyTable.insert(pair<string,int> (token,1));
             }
             token=strtok(NULL,tags.c_str());
         }
@@ -64,11 +74,11 @@ void Document::removeStopWords(vector<string> stopW)
     for(unsigned int i=0;i<stopW.size();i++)
     {
 
-        it=frecuencyTable.find(stopW[i]);
+        it=frequencyTable.find(stopW[i]);
 
-        if(it!=frecuencyTable.end())
+        if(it!=frequencyTable.end())
         {
-            frecuencyTable.erase(it);
+            frequencyTable.erase(it);
         }
         else
         {
@@ -86,25 +96,25 @@ void Document::showText()
     cout<<"----------------------------"<<endl;
 }
 
-void Document::setFrecuencyTable(map<string, int> frecuencyTable)
+void Document::setFrequencyTable(map<string, int> frequencyTable)
 {
-    this->frecuencyTable.clear();
-    this->frecuencyTable=frecuencyTable;
+    this->frequencyTable.clear();
+    this->frequencyTable=frequencyTable;
 }
 
-map<string, int> Document::getFrecuencyTable()
+map<string, int> Document::getFrequencyTable()
 {
-    return this->frecuencyTable;
+    return this->frequencyTable;
 }
 
-void Document::showFrecuencyTable()
+void Document::showFrequencyTable()
 {
     std::map<string,int>::iterator it;
-    it=frecuencyTable.begin();
+    it=frequencyTable.begin();
 
     cout<<"----------------------------"<<endl;
     cout<<"Frequency Table:"<<endl;
-    while(it!=frecuencyTable.end())
+    while(it!=frequencyTable.end())
     {
         cout<<it->first<<" "<<it->second<<endl;
         it++;

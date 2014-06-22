@@ -1,5 +1,6 @@
 #include "corpora.h"
 
+/*
 float Corpora::diceMetric(int a, int b)
 {
     float dice;
@@ -168,3 +169,4 @@ vector<vector<float> > Corpora::GenerateDiceMatrix()
 
 
 
+*/

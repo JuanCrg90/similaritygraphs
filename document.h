@@ -1,7 +1,7 @@
 /**
     @file: Document.h
     @author: Juan Carlos Ruiz González (jc.ruiz.gonzalez@ugto.mx)
-    @date 12/04/2014
+    @date 21/06/2014
     @brief Class for handling the  Document text
     @version 1.0
 
@@ -49,9 +49,9 @@ private:
     string fullText;
 
     /**
-     * @brief Frecuency table of the full text
+     * @brief Frequency table of the full text
      */
-    map<string,int> frecuencyTable;
+    map<string,int> frequencyTable;
 
 
 
@@ -71,6 +71,20 @@ public:
     Document(string name,string fullText);
 
 
+
+    /**
+     * @brief setName
+     * @param name
+     */
+    void setName(string name);
+
+    /**
+     * @brief getName
+     * @return
+     */
+    string getName();
+
+
     /**
      * @brief setText
      * @param fullText
@@ -84,12 +98,15 @@ public:
     string getText();
 
     /**
-     * @brief generateFrecuencyTable
+     * @brief generateFrequencyTable
      * @return true or false
      */
-    bool generateFrecuencyTable();
+    bool generateFrequencyTable();
 
-
+    /**
+     * @brief removeStopWords
+     * @param stopW
+     */
     void removeStopWords(vector<string> stopW);
 
 
@@ -99,23 +116,23 @@ public:
     void showText();
 
     /**
-     * @brief setFrecuencyTable
-     * @param frecuencyTable
+     * @brief setFrequencyTable
+     * @param frequencyTable
      */
-    void setFrecuencyTable(map<string,int> frecuencyTable);
+    void setFrequencyTable(map<string,int> frequencyTable);
 
     /**
-     * @brief getFrecuencyTable
+     * @brief getFrequencyTable
      * @return map<string,int>
      */
-    map<string,int> getFrecuencyTable();
+    map<string,int> getFrequencyTable();
 
 
 
     /**
-     * @brief showFrecuencyTable
+     * @brief showFrequencyTable
      */
-    void showFrecuencyTable();
+    void showFrequencyTable();
 
 
 };

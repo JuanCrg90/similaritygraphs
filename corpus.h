@@ -1,9 +1,9 @@
 /**
     @file: Corpus.h
     @author: Juan Carlos Ruiz González (jc.ruiz.gonzalez@ugto.mx)
-    @date 12/04/2014
-    @brief Class for handling the text corpus
-    @version 1.0
+    @date 21/06/2014
+    @brief Class for handling the documents
+    @version 2.0
 
 **/
 
@@ -22,6 +22,9 @@
 #include <algorithm>
 
 
+#include "document.h"
+
+
 using namespace std;
 
 /**
@@ -33,25 +36,12 @@ class Corpus
 
 
 private:
-    /**
-     * @brief tags for tokenize the text
-     */
-    const string tags = " ,.;:?!#\"()\n\t";
-
-    /**
-     * @brief corpus name
-     */
+    
     string name;
-
-    /**
-     * @brief text to handle
-     */
-    string fullText;
-
-    /**
-     * @brief Frecuency table of the full text
-     */
-    map<string,int> frecuencyTable;
+    vector<Document> corp;
+    map<string,int> corpusFrequencyTable;
+    
+    
 
 
 
@@ -61,61 +51,70 @@ public:
      */
     Corpus();
 
-
     /**
-     * @brief Corpus construcctor
+     * @brief setName
      * @param name
-     * @param fullText
+     */
+    void setName(string name);
+
+    /**
+     * @brief getName
+     * @return
+     */
+    string getName();
+
+    /**
+     * @brief addDocument
+     * @param doc
+     */
+    void addDocument(Document doc);
+
+    /**
+     * @brief getDocument
+     * @param index
+     * @return
+     */
+    Document getDocument(int index);
+
+    /**
+     * @brief generateCorpusFrequencyTable
      */
 
-    Corpus(string name,string fullText);
+    void generateCorpusFrequencyTable();
+
+    /**
+     * @brief showCorpusFrequencyTable
+     */
+    void showCorpusFrequencyTable();
+
+    /**
+     * @brief getCorpusFrequencyTable
+     * @return
+     */
+    map<string, int> getCorpusFrequencyTable() const;
+
+    /**
+     * @brief setCorpusFrequencyTable
+     * @param value
+     */
+    void setCorpusFrequencyTable(const map<string, int> &value);
 
 
     /**
-     * @brief setText
-     * @param fullText
+     * @brief balanceCorpus: add the non existent words with 0 frequency
      */
-    void setText(string fullText);
+    void balanceCorpus();
 
     /**
-     * @brief getText
-     * @return fullText
+     * @brief remove the words in each map under the threshold
+     * @param th
      */
-    string getText();
-
-    /**
-     * @brief generateFrecuencyTable
-     * @return true or false
-     */
-    bool generateFrecuencyTable();
-
-
-    void removeStopWords(vector<string> stopW);
-
-
-    /**
-     * @brief showText
-     */
-    void showText();
-
-    /**
-     * @brief setFrecuencyTable
-     * @param frecuencyTable
-     */
-    void setFrecuencyTable(map<string,int> frecuencyTable);
-
-    /**
-     * @brief getFrecuencyTable
-     * @return map<string,int>
-     */
-    map<string,int> getFrecuencyTable();
+    void threshold(int th);
 
 
 
-    /**
-     * @brief showFrecuencyTable
-     */
-    void showFrecuencyTable();
+
+
 
 
 };

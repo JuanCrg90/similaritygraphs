@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "document.h"
-#include "corpora.h"
+#include "corpus.h"
 
 
 #include "preprocesor.h"
@@ -21,9 +20,9 @@ int main(int argc, char *argv[])
 /*
     Corpus prueba;
     prueba.setText(" &lt;br /&gt; ");
-    prueba.generateFrecuencyTable();
+    prueba.generateFrequencyTable();
     prueba.showText();
-    prueba.showFrecuencyTable();
+    prueba.showFrequencyTable();
 */
 /*
 
@@ -67,21 +66,43 @@ int main(int argc, char *argv[])
     Document prueba3;
 
     prueba1.setText("el gato en el establo bebe leche todo el año");    
-    prueba1.generateFrecuencyTable();
+    prueba1.generateFrequencyTable();
     prueba1.showText();
-    prueba1.showFrecuencyTable();
+    prueba1.showFrequencyTable();
 
 
     prueba2.setText("el caballo en el establo es de pepe");
-    prueba2.generateFrecuencyTable();
+    prueba2.generateFrequencyTable();
     prueba2.showText();
-    prueba2.showFrecuencyTable();
+    prueba2.showFrequencyTable();
 
     prueba3.setText("pepe pepe pecas pica papas en el carro");
-    prueba3.generateFrecuencyTable();
+    prueba3.generateFrequencyTable();
     prueba3.showText();
-    prueba3.showFrecuencyTable();
+    prueba3.showFrequencyTable();
 
+    Corpus a;
+
+    a.addDocument(prueba1);
+    a.addDocument(prueba2);
+    a.addDocument(prueba3);
+
+    a.balanceCorpus();
+
+    a.getDocument(0).showFrequencyTable();
+    a.getDocument(1).showFrequencyTable();
+    a.getDocument(2).showFrequencyTable();
+
+    a.generateCorpusFrequencyTable();
+    a.showCorpusFrequencyTable();
+
+    a.threshold(2);
+    //a.getDocument(0).showFrequencyTable();
+    //a.getDocument(1).showFrequencyTable();
+    //a.getDocument(2).showFrequencyTable();
+
+    a.generateCorpusFrequencyTable();
+    a.showCorpusFrequencyTable();
 
 
 }

@@ -1,126 +1,61 @@
 #include "corpora.h"
 
-/*
-float Corpora::diceMetric(int a, int b)
-{
-    float dice;
-
-    dice= 2*float((a*b))/float(a+b);
-
-    return dice;
-
-}
 
 Corpora::Corpora()
 {
 }
 
-void Corpora::setCorpora(vector<Corpus> corpora)
+void Corpora::setCorpora(const vector<Corpus> &value)
 {
-    this->corpora.clear();
-
-    for(unsigned int i=0; i<corpora.size();i++)
-        this->corpora.push_back(corpora[i]);
-
+    //corpora = value;
 }
 
-vector<Corpus> Corpora::getCorpora()
+vector<Corpus> Corpora::getCorpora() const
 {
-    return this->corpora;
+    return corpora;
 }
 
 void Corpora::addCorpus(Corpus corp)
 {
-    this->corpora.push_back(corp);
-
+    corpora.push_back(corp);
 }
 
-void Corpora::threshold(int th)
+Corpus Corpora::getCorpus(int index)
 {
-    map<string,int> corp;
-    std::map<string,int>::iterator it;
-
-    for(unsigned int i=0;i<corpora.size();i++)
-    {
-        corp=corpora[i].getFrecuencyTable();
-        it=corp.begin();
-
-        while(it!=corp.end())
-        {
-            if(it->second < th)
-            {
-                corp.erase(it);
-            }
-            it++;
-        }
-
-        corpora[i].setFrecuencyTable(corp);
-
-    }
+    return corpora[index];
 }
 
 
-void Corpora::balance()
+void Corpora::setCorporaFrequencyTable(const map<string, int> &value)
+{
+    corporaFrequencyTable = value;
+}
+
+map<string, int> Corpora::getCorporaFrequencyTable() const
+{
+    return corporaFrequencyTable;
+}
+
+void Corpora::generateCorporaFrequencyTable()
 {
     map<string,int> corpi; //Tabla de Frecuencias del Corpus i
-    map<string,int> corpj; //Tabla de Frecuencias del Corpus j
-
     std::map<string,int>::iterator it1;
     std::map<string,int>::iterator it2;
 
-    for(unsigned int i=0;i<corpora.size();i++)
-    {
-        corpi = corpora[i].getFrecuencyTable();
-
-
-        for(unsigned int j=0;j<corpora.size();j++)
-        {
-            corpj = corpora[j].getFrecuencyTable();
-
-
-            it1=corpj.begin();
-
-            //cout<<"Corpus "<<i<< " VS "<<j<<endl;
-
-            while(it1!=corpj.end())
-            {
-                it2=corpi.find(it1->first);
-
-                if(it2==corpi.end())
-                {
-                    //cout<<it1->first<<" No Existe"<<endl;
-                    corpi.insert(pair<string,int> (it1->first,0));
-                    corpora[i].setFrecuencyTable(corpi);
-                }
-                else
-                {
-                    //cout<<it1->first<<" Existe"<<endl;
-                }
-                it1++;
-            }
-        }
-    }
-}
-
-void Corpora::generateGlobal()
-{
-    map<string,int> corpi; //Tabla de Frecuencias del Corpus i
-    map<string,int> corpGlobal; //Tabla de Frecuencias global
-    std::map<string,int>::iterator it1;
-    std::map<string,int>::iterator it2;     
+    corporaFrequencyTable.clear();
 
     for(unsigned int i=0;i<corpora.size();i++)
     {
-        corpi = corpora[i].getFrecuencyTable();
+        corpi = corpora[i].getCorpusFrequencyTable();
 
         it1=corpi.begin();
 
         while(it1!=corpi.end())
         {
-            it2=corpGlobal.find(it1->first);
+            it2=corporaFrequencyTable.find(it1->first);
 
 
-            if(it2!=corpGlobal.end())
+            if(it2!=corporaFrequencyTable.end())
             {
                 //cout<<it1->first<<" Existe "<< it2->second<<endl;
                 it2->second+=it1->second;
@@ -129,7 +64,7 @@ void Corpora::generateGlobal()
             else
             {
                 //cout<<it1->first<<" No Existe"<<endl;
-                corpGlobal.insert(pair<string,int> (it1->first,it1->second));
+                corporaFrequencyTable.insert(pair<string,int> (it1->first,it1->second));
             }
             it1++;
         }
@@ -137,36 +72,19 @@ void Corpora::generateGlobal()
 
     }
 
-    global.setFrecuencyTable(corpGlobal);
-
-
 }
 
-Corpus Corpora::getGlobal()
+void Corpora::showCorporaFrequencyTable()
 {
-    return global;
+    std::map<string,int>::iterator it;
+    it=corporaFrequencyTable.begin();
+
+    cout<<"----------------------------"<<endl;
+    cout<<"Corpora Frequency Table:"<<endl;
+    while(it!=corporaFrequencyTable.end())
+    {
+        cout<<it->first<<" "<<it->second<<endl;
+        it++;
+    }
+    cout<<"----------------------------"<<endl;
 }
-
-vector<vector<float> > Corpora::GenerateDiceMatrix()
-{
-    vector<vector<float> > result;
-
-    result.resize(corpora[0].getFrecuencyTable().size()*corpora.size());
-
-
-    cout<<result.size();
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-*/

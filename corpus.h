@@ -106,11 +106,16 @@ public:
     void balanceCorpus();
 
     /**
-     * @brief remove the words in each map under the threshold
+     * @brief remove the words in each Document map under the threshold and regenerate the corpusFrequency
      * @param th
      */
     void threshold(int th);
 
+    /**
+     * @brief corpusThreshold remove the words only on the corpusFrequency table
+     * @param th
+     */
+    void corpusThreshold(int th);
 
 
 

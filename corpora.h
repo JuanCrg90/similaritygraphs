@@ -23,37 +23,33 @@ private:
      * @brief corpora
      */
     vector<Corpus> corpora;
-    /**
-     * @brief global corpora
-     */
-    Corpus global;
 
     /**
-     * @brief diceMetric
-     * $$2\dfrac{a*b}{a+b}$$
-     * @param a
-     * @param b
-     * @return
+     * @brief corporaFrequencyTable
      */
-    float diceMetric(int a, int b);
+    map<string,int> corporaFrequencyTable;
 
 
 
 
 public:
+
+    /**
+     * @brief Corpora
+     */
     Corpora();
 
     /**
      * @brief setCorpora
-     * @param corpora
+     * @param value
      */
-    void setCorpora(vector<Corpus> corpora);
+    void setCorpora(const vector<Corpus> &value);
 
     /**
      * @brief getCorpora
-     * @return vector<Corpus>
+     * @return
      */
-    vector<Corpus> getCorpora();
+    vector<Corpus> getCorpora() const;
 
     /**
      * @brief addCorpus
@@ -62,37 +58,33 @@ public:
     void addCorpus(Corpus corp);
 
     /**
-     * @brief remove the words in each map under the threshold
-     * @param th
-     */
-    void threshold(int th);
-
-
-    /**
-     * @brief balance the corpus with the same words
-     */
-    void balance();
-
-    /**
-     * @brief generateGlobal
-     */
-
-    void generateGlobal();
-
-    /**
-     * @brief getGlobal corpus Map
+     * @brief getCorpus
+     * @param index
      * @return
      */
-    Corpus getGlobal();
+    Corpus getCorpus(int index);
 
+    /**
+     * @brief setCorporaFrequencyTable
+     * @param value
+     */
+    void setCorporaFrequencyTable(const map<string, int> &value);
 
-    vector < vector<float> > GenerateDiceMatrix();
+    /**
+     * @brief getCorporaFrequencyTable
+     * @return
+     */
+    map<string, int> getCorporaFrequencyTable() const;
 
+    /**
+     * @brief generateCorporaFrequencyTable
+     */
+    void generateCorporaFrequencyTable();
 
-
-
-
-
+    /**
+     * @brief showCorporaFrequencyTable
+     */
+    void showCorporaFrequencyTable();
 
 };
 

@@ -25,7 +25,7 @@ Document Corpus::getDocument(int index)
 
 void Corpus::generateCorpusFrequencyTable()
 {
-    map<string,int> doci; //Tabla de Frecuencias del Corpus i
+    map<string,int> doci; //Tabla de Frecuencias del Documento i
     std::map<string,int>::iterator it1;
     std::map<string,int>::iterator it2;
 
@@ -130,6 +130,7 @@ void Corpus::balanceCorpus()
             }
         }
     }
+    generateCorpusFrequencyTable();
 }
 
 void Corpus::threshold(int th)
@@ -152,6 +153,26 @@ void Corpus::threshold(int th)
         }
         corp[i].setFrequencyTable(auxiliarCorp);
     }
+
+    generateCorpusFrequencyTable();
+
+}
+
+void Corpus::corpusThreshold(int th)
+{
+    std::map<string,int>::iterator it;
+
+    it=corpusFrequencyTable.begin();
+
+    while(it!=corpusFrequencyTable.end())
+    {
+        if(it->second < th)
+        {
+            corpusFrequencyTable.erase(it);
+        }
+        it++;
+    }
+
 
 }
 

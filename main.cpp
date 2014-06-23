@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "corpus.h"
+#include "corpora.h"
 
 
 #include "preprocesor.h"
@@ -14,18 +14,7 @@ int main(int argc, char *argv[])
     w.show();
 
     return a.exec();*/
-
-
-
 /*
-    Corpus prueba;
-    prueba.setText(" &lt;br /&gt; ");
-    prueba.generateFrequencyTable();
-    prueba.showText();
-    prueba.showFrequencyTable();
-*/
-/*
-
     vector<string> stopWords;
 
     stopWords.push_back("el");
@@ -64,6 +53,11 @@ int main(int argc, char *argv[])
     Document prueba1;
     Document prueba2;
     Document prueba3;
+    Document prueba4;
+    Document prueba5;
+    Document prueba6;
+
+    cout<<"Grupo 1"<<endl;
 
     prueba1.setText("el gato en el establo bebe leche todo el año");    
     prueba1.generateFrequencyTable();
@@ -81,28 +75,60 @@ int main(int argc, char *argv[])
     prueba3.showText();
     prueba3.showFrequencyTable();
 
-    Corpus a;
+
+    cout<<"Grupo 2"<<endl;
+
+    prueba4.setText("Documento 1 Corpus 2");
+    prueba4.generateFrequencyTable();
+    prueba4.showText();
+    prueba4.showFrequencyTable();
+
+    prueba5.setText("Caso para el documento numero 2 Corpus 2");
+    prueba5.generateFrequencyTable();
+    prueba5.showText();
+    prueba5.showFrequencyTable();
+
+    prueba6.setText("Documento 3 en el Corpus 2");
+    prueba6.generateFrequencyTable();
+    prueba6.showText();
+    prueba6.showFrequencyTable();
+
+
+    Corpus a,b;
+    Corpora corpora;
 
     a.addDocument(prueba1);
     a.addDocument(prueba2);
     a.addDocument(prueba3);
 
+    b.addDocument(prueba4);
+    b.addDocument(prueba5);
+    b.addDocument(prueba6);
+
     a.balanceCorpus();
+    b.balanceCorpus();
 
     a.getDocument(0).showFrequencyTable();
     a.getDocument(1).showFrequencyTable();
     a.getDocument(2).showFrequencyTable();
 
-    a.generateCorpusFrequencyTable();
-    a.showCorpusFrequencyTable();
+    b.getDocument(0).showFrequencyTable();
+    b.getDocument(1).showFrequencyTable();
+    b.getDocument(2).showFrequencyTable();
 
-    a.threshold(2);
-    //a.getDocument(0).showFrequencyTable();
-    //a.getDocument(1).showFrequencyTable();
-    //a.getDocument(2).showFrequencyTable();
-
-    a.generateCorpusFrequencyTable();
     a.showCorpusFrequencyTable();
+    b.showCorpusFrequencyTable();
+
+    corpora.addCorpus(a);
+    corpora.addCorpus(b);
+
+    corpora.generateCorporaFrequencyTable();
+    corpora.showCorporaFrequencyTable();
+
+
+
+
+
 
 
 }

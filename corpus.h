@@ -40,9 +40,6 @@ private:
     string name;
     vector<Document> corp;
     map<string,int> corpusFrequencyTable;
-    
-    
-
 
 
 public:
@@ -62,6 +59,18 @@ public:
      * @return
      */
     string getName();
+
+    /**
+     * @brief getCorp
+     * @return
+     */
+    vector<Document> getCorp() const;
+
+    /**
+     * @brief setCorp
+     * @param value
+     */
+    void setCorp(const vector<Document> &value);
 
     /**
      * @brief addDocument
@@ -116,9 +125,6 @@ public:
      * @param th
      */
     void corpusThreshold(int th);
-
-
-
 
 
 

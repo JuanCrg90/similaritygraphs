@@ -13,6 +13,17 @@ string Corpus::getName()
     return name;
 }
 
+
+void Corpus::setCorp(const vector<Document> &value)
+{
+    //corp = value;
+}
+
+vector<Document> Corpus::getCorp() const
+{
+    return corp;
+}
+
 void Corpus::addDocument(Document doc)
 {
     this->corp.push_back(doc);

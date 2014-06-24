@@ -24,14 +24,16 @@ SOURCES += main.cpp\
     corpus.cpp \
     preprocesor.cpp \
     corpora.cpp \
-    document.cpp
+    document.cpp \
+    metrics.cpp
 
 
 HEADERS  += mainwindow.h \
     corpus.h \
     preprocesor.h \
     corpora.h \
-    document.h
+    document.h \
+    metrics.h
     corpus.cpp
 
 

@@ -29,9 +29,6 @@ private:
      */
     map<string,int> corporaFrequencyTable;
 
-
-
-
 public:
 
     /**

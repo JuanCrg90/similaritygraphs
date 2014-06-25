@@ -29,6 +29,11 @@ private:
      */
     void copyDocuments(vector<Document> *docs,Corpora c);
 
+    /**
+     * @brief transpose
+     * @param mat
+     * @return
+     */
     vector<vector<float> > transpose(vector<vector<float> > mat );
 
 
@@ -41,6 +46,37 @@ private:
      */
     float manhatan(Document d1,Document d2);
 
+    /**
+     * @brief dice
+     * @param d1
+     * @param d2
+     * @return
+     */
+    float dice(Document d1,Document d2);
+
+    /**
+     * @brief cosMetric
+     * @param d1
+     * @param d2
+     * @return
+     */
+
+    float cosMetric(Document d1,Document d2);
+
+    /**
+     * @brief jaccard
+     * @param d1
+     * @param d2
+     * @return
+     */
+    float jaccard(Document d1,Document d2);
+
+
+
+
+
+
+
 
 
 
@@ -52,7 +88,35 @@ public:
     Metrics();
 
 
+    /**
+     * @brief generateManhatan
+     * @param c
+     * @return
+     */
     vector < vector <float > > generateManhatan(Corpora c);
+
+    /**
+     * @brief generateDice
+     * @param c
+     * @return
+     */
+    vector < vector <float > > generateDice(Corpora c);
+
+    /**
+     * @brief generateCos
+     * @param c
+     * @return
+     */
+    vector < vector <float > > generateCos(Corpora c);
+
+    /**
+     * @brief generateJaccard
+     * @param c
+     * @return
+     */
+    vector < vector <float > > generateJaccard(Corpora c);
+
+
 
 };
 

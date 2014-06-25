@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
 
     matrix=met.generateManhatan(corpora);
 
+
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -136,12 +137,44 @@ int main(int argc, char *argv[])
         cout<<endl;
     }
 
+    cout <<endl;
+    matrix=met.generateDice(corpora);
 
 
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    cout <<endl;
+    matrix=met.generateCos(corpora);
 
 
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    cout <<endl;
+    matrix=met.generateJaccard(corpora);
 
 
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
 
 
 

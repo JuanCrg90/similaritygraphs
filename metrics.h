@@ -72,18 +72,6 @@ private:
     float jaccard(Document d1,Document d2);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 public:
     Metrics();
 

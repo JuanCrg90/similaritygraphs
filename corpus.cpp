@@ -121,7 +121,7 @@ void Corpus::balanceCorpus()
 
             it1=docj.begin();
 
-            //cout<<"Corpus "<<i<< " VS "<<j<<endl;
+            cout<<"Corpus "<<i<< " VS "<<j<<endl;
 
             while(it1!=docj.end())
             {

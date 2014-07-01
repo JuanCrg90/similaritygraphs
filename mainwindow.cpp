@@ -19,11 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->CorporaTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorporaClick(int,int)));
     connect(ui->CorpusTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorpusClick(int,int)));
 
-
-
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -276,7 +271,6 @@ void MainWindow::initDocumentFrequencyTable(int row, int col)
         it++;
         i++;
     }
-
 
     ui->FrequencytableWidget->resizeColumnsToContents();
 

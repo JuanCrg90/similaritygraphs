@@ -42,7 +42,6 @@ class Preprocesor
 {
 
 private:
-    int muestra;
     /**
      * @brief tags for tokenize the text
      */

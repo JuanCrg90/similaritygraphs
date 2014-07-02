@@ -13,6 +13,7 @@
 #include "corpora.h"
 #include "metrics.h"
 #include "preprocesor.h"
+#include"barcharts.h"
 
 
 
@@ -27,8 +28,14 @@ class MainWindow : public QMainWindow
 
 public slots:
     void load();
+
     void onCorporaClick(int row,int col);
+    void onCorporaDoubleClick(int row,int col);
+
     void onCorpusClick(int row,int col);
+    void onCorpusDoubleClick(int row,int col);
+
+
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -52,20 +59,13 @@ private:
     vector<QStringList> subDirFileList; //paths de los archivos en el subdirectorio
     vector<QStringList> fileNameList; //nombres de los archivos en el subdirectorio
 
-
-
-
-
     Corpora corpora;
     int actualClass;
 
-    //Document auxDoc;
-    //Preprocesor prepro;
+    BarCharts *barChart;
 
 
-
-
-
+    void LoadStopWords();
     void readDirList(QString path);
     void readFileList(QString path);
     Document readDoc(QString path, QString name);

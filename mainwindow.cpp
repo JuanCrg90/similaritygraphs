@@ -16,8 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(ui->LoadButton,SIGNAL(clicked()),this,SLOT(load()));
+
     connect(ui->CorporaTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorporaClick(int,int)));
+    connect(ui->CorporaTableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onCorporaDoubleClick(int,int)));
+
     connect(ui->CorpusTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorpusClick(int,int)));
+    connect(ui->CorpusTableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onCorpusDoubleClick(int,int)));
 
 }
 
@@ -26,9 +30,48 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::LoadStopWords()
+{
+    QString path;
+    QFile* file;
+
+    stopWords.clear();
+
+
+    path=QFileDialog::getOpenFileName(this,"Select Dir","./assets/stopWords","*.txt");
+
+    if(!path.isEmpty())
+    {
+        file= new QFile(path);
+
+        if(file->open(QIODevice::ReadOnly| QIODevice::Text))
+        {
+            QTextStream in(file);
+
+            do
+            {
+                stopWords.push_back(in.readLine().toStdString());
+            }while(!in.atEnd());
+        }
+        file->close();
+    }
+    else
+    {
+        QMessageBox::information(this,"Message","No Stop sords selected");
+    }
+}
+
 void MainWindow::load()
 {
     QString path;
+    int reply;
+
+    reply=QMessageBox::question(this,"Message","Do you want remove the Stop words?");
+
+    if(reply==QMessageBox::Yes)
+    {
+        LoadStopWords();
+    }
 
 
     path=QFileDialog::getExistingDirectory(this,"Select Dir","./assets");
@@ -188,9 +231,71 @@ void MainWindow::onCorporaClick(int row, int col)
 
 }
 
+void MainWindow::onCorporaDoubleClick(int row, int col)
+{
+
+
+    map<string, int> ft=corpora.getCorpora().at(row).getCorpusFrequencyTable();
+
+    QVector<QString> labels;
+    QVector<int> data;
+
+    std::map<string,int>::iterator it;
+
+
+    for(it = ft.begin(); it != ft.end(); it++ )
+    {
+        labels.push_back(QString::fromStdString(it->first));
+        data.push_back( it->second );
+    }
+
+    barChart= new BarCharts();
+
+    barChart->setName(dirNameList[row]);
+    barChart->setLabels(labels);
+    barChart->setData(data);
+    barChart->plot();
+    barChart->show();
+
+
+
+
+}
+
 void MainWindow::onCorpusClick(int row, int col)
 {
     initDocumentFrequencyTable(row,col);
+
+}
+
+void MainWindow::onCorpusDoubleClick(int row, int col)
+{
+    map<string, int> ft = corpora.getCorpora().at(actualClass).getDocument(row).getFrequencyTable();
+
+    QVector<QString> labels;
+    QVector<int> data;
+
+    std::map<string,int>::iterator it;
+
+
+    for(it = ft.begin(); it != ft.end(); it++ )
+    {
+        labels.push_back(QString::fromStdString(it->first));
+        data.push_back( it->second );
+    }
+
+    barChart= new BarCharts();
+
+
+    barChart->setName(fileNameList[actualClass][row]);
+    barChart->setLabels(labels);
+    barChart->setData(data);
+    barChart->plot();
+    barChart->show();
+
+
+
+
 
 }
 

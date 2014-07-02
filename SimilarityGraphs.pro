@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = SimilarityGraphs
 TEMPLATE = app
@@ -25,7 +25,9 @@ SOURCES += main.cpp\
     preprocesor.cpp \
     corpora.cpp \
     document.cpp \
-    metrics.cpp
+    metrics.cpp \
+    barcharts.cpp \
+    qcustomplot.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -33,10 +35,13 @@ HEADERS  += mainwindow.h \
     preprocesor.h \
     corpora.h \
     document.h \
-    metrics.h
+    metrics.h \
+    barcharts.h \
+    qcustomplot.h
     corpus.cpp
 
 
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    barcharts.ui
 

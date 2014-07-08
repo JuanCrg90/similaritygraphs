@@ -78,6 +78,22 @@ public:
      */
     void generateCorporaFrequencyTable();
 
+
+    /**
+     * @brief threshold
+     * @param th
+     */
+    void threshold(int th);
+
+
+    /**
+     * @brief clear
+     */
+
+    void clear();
+
+
+
     /**
      * @brief showCorporaFrequencyTable
      */

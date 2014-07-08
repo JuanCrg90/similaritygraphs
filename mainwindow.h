@@ -35,6 +35,8 @@ public slots:
     void onCorpusClick(int row,int col);
     void onCorpusDoubleClick(int row,int col);
 
+    void onThresholdClick();
+
 
 
 public:

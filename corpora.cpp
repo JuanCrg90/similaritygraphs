@@ -74,6 +74,23 @@ void Corpora::generateCorporaFrequencyTable()
 
 }
 
+void Corpora::threshold(int th)
+{
+
+    for(unsigned int i=0;i<corpora.size();i++)
+    {        
+        corpora[i].threshold(th);
+    }
+
+}
+
+void Corpora::clear()
+{
+    corpora.clear();
+    corporaFrequencyTable.clear();
+
+}
+
 void Corpora::showCorporaFrequencyTable()
 {
     std::map<string,int>::iterator it;

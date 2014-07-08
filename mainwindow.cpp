@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->CorpusTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorpusClick(int,int)));
     connect(ui->CorpusTableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onCorpusDoubleClick(int,int)));
 
+    connect(ui->ThresholdPushButton,SIGNAL(clicked()),this,SLOT(onThresholdClick()));
+
 }
 
 MainWindow::~MainWindow()
@@ -66,6 +68,15 @@ void MainWindow::load()
     QString path;
     int reply;
 
+
+    corpora.clear();
+
+    dirPathList.clear();
+    dirNameList.clear();
+    dirList.clear();
+
+
+
     reply=QMessageBox::question(this,"Message","Do you want remove the Stop words?");
 
     if(reply==QMessageBox::Yes)
@@ -101,6 +112,7 @@ void MainWindow::readDirList(QString path)
 
 
     dir.setPath(path);
+
 
     dirList.clear();
 
@@ -293,7 +305,14 @@ void MainWindow::onCorpusDoubleClick(int row, int col)
     barChart->plot();
     barChart->show();
 
+}
 
+void MainWindow::onThresholdClick()
+{
+    QString value = ui->ThresholdLineEdit->text();
+    int th = value.toInt();
+    corpora.threshold(th);
+    ui->FrequencytableWidget->clear();
 
 
 
@@ -301,7 +320,7 @@ void MainWindow::onCorpusDoubleClick(int row, int col)
 
 void MainWindow::initCorpusTable(int row, int col)
 {
-    qDebug()<<row<<" "<<col;
+    //qDebug()<<row<<" "<<col;
 
     int size=corpora.getCorpora().at(row).getCorp().size();
 

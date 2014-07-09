@@ -39,6 +39,8 @@ public slots:
 
 
     void onDiceClick();
+    void onCosClick();
+
 
 
 

@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(ui->DiceButton,SIGNAL(clicked()),this,SLOT(onDiceClick()));
+    connect(ui->CosButton,SIGNAL(clicked()),this,SLOT(onCosClick()));
 
 
 
@@ -41,11 +42,14 @@ void MainWindow::LoadStopWords()
 {
     QString path;
     QFile* file;
+    QElapsedTimer timer;
+
 
     stopWords.clear();
 
 
     path=QFileDialog::getOpenFileName(this,"Select Dir","./assets/stopWords","*.txt");
+    timer.start();
 
     if(!path.isEmpty())
     {
@@ -66,6 +70,8 @@ void MainWindow::LoadStopWords()
     {
         QMessageBox::information(this,"Message","No Stop sords selected");
     }
+
+    qDebug()<<timer.elapsed()/1000.0;
 }
 
 void MainWindow::load()
@@ -325,11 +331,16 @@ void MainWindow::onDiceClick()
     vector <vector<float> > matrix;
     QVector<QVector<float> > mat;
 
+    QElapsedTimer timer;
+    timer.start();
+
+
     qDebug()<<"Dice";
 
     matrix=met.generateDice(corpora);
+    qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
-
+/*
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -338,7 +349,7 @@ void MainWindow::onDiceClick()
         }
         cout<<endl;
     }
-
+*/
 
     mat.resize(matrix.size());
 
@@ -355,14 +366,95 @@ void MainWindow::onDiceClick()
         }
     }
 
+    qint64 elapsed = timer.elapsed()/1000.0;
 
+    if(elapsed >= 60 )
+    {
+        elapsed/=60.0;
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+    }
+    else
+    {
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+    }
 
+    qDebug()<<"Graficando";
     simGraph = new SimilarityGraph();
     simGraph->setTitle("Dice Metric");
     simGraph->setMat(mat);
     simGraph->plot();
     simGraph->show();
+
+
 }
+
+
+
+
+void MainWindow::onCosClick()
+{
+    Metrics met;
+    vector <vector<float> > matrix;
+    QVector<QVector<float> > mat;
+
+    QElapsedTimer timer;
+    timer.start();
+
+
+    qDebug()<<"Cos";
+
+    matrix=met.generateCos(corpora);
+    qDebug()<<"Aplicando negativo";
+    matrix=met.negativeMatrix(matrix,1.0);
+/*
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+*/
+
+    mat.resize(matrix.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+      mat[i].resize(matrix[i].size());
+    }
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            mat[i][j]=matrix[i][j];
+        }
+    }
+
+    qint64 elapsed = timer.elapsed()/1000.0;
+
+    if(elapsed >= 60 )
+    {
+        elapsed/=60.0;
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+    }
+    else
+    {
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+    }
+
+    qDebug()<<"Graficando";
+    simGraph = new SimilarityGraph();
+    simGraph->setTitle("Cosine Metric");
+    simGraph->setMat(mat);
+    simGraph->plot();
+    simGraph->show();
+
+
+}
+
+
 
 void MainWindow::initCorpusTable(int row, int col)
 {

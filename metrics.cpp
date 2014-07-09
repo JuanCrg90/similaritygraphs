@@ -95,6 +95,32 @@ vector<vector<float> > Metrics::transpose(vector<vector<float> > mat)
     return trans;
 }
 
+vector<vector<float> > Metrics::multiplyByScalar(vector<vector<float> > mat,int scalar)
+{
+    for(unsigned int i=0;i<mat.size();i++)
+    {
+        for(unsigned int j=0;j<mat[i].size();j++)
+        {
+            mat[i][j]*=scalar;
+        }
+    }
+
+    return mat;
+
+}
+
+vector<vector<float> > Metrics::negativeMatrix(vector<vector<float> > mat,float val)
+{
+    for(unsigned int i=0;i<mat.size();i++)
+    {
+        for(unsigned int j=0;j<mat[0].size();j++)
+        {
+            mat[i][j]=val-mat[i][j];
+        }
+    }
+    return mat;
+}
+
 float Metrics::manhatan(Document d1, Document d2)
 {
     map<string,int> doci; //Tabla de Frequencias del Corpus i

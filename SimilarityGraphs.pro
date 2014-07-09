@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     document.cpp \
     metrics.cpp \
     barcharts.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    similaritygraph.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -37,11 +38,13 @@ HEADERS  += mainwindow.h \
     document.h \
     metrics.h \
     barcharts.h \
-    qcustomplot.h
+    qcustomplot.h \
+    similaritygraph.h
     corpus.cpp
 
 
 
 FORMS    += mainwindow.ui \
-    barcharts.ui
+    barcharts.ui \
+    similaritygraph.ui
 

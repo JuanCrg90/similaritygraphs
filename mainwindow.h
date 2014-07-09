@@ -13,8 +13,8 @@
 #include "corpora.h"
 #include "metrics.h"
 #include "preprocesor.h"
-#include"barcharts.h"
-
+#include "barcharts.h"
+#include "similaritygraph.h"
 
 
 namespace Ui {
@@ -36,6 +36,11 @@ public slots:
     void onCorpusDoubleClick(int row,int col);
 
     void onThresholdClick();
+
+
+    void onDiceClick();
+
+
 
 
 
@@ -65,6 +70,7 @@ private:
     int actualClass;
 
     BarCharts *barChart;
+    SimilarityGraph *simGraph;
 
 
     void LoadStopWords();
@@ -72,20 +78,10 @@ private:
     void readFileList(QString path);
     Document readDoc(QString path, QString name);
 
-
-
-
-
-
     void initCorporaTable();
     void initCorpusTable(int row,int col);
     void initCorpusFrequencyTable(int row,int col);
     void initDocumentFrequencyTable(int row,int col);
-
-
-
-
-
 
 };
 

@@ -25,6 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->ThresholdPushButton,SIGNAL(clicked()),this,SLOT(onThresholdClick()));
 
+
+    connect(ui->DiceButton,SIGNAL(clicked()),this,SLOT(onDiceClick()));
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -139,7 +144,7 @@ void MainWindow::readDirList(QString path)
     corpora.generateCorporaFrequencyTable();
     //corpora.showCorporaFrequencyTable();
 
-    qDebug()<<corpora.getCorpora().at(0).getCorp().size();
+    //qDebug()<<corpora.getCorpora().at(0).getCorp().size();
     corpora.getCorpora().at(0).showCorpusFrequencyTable();
     initCorporaTable();
 
@@ -304,7 +309,6 @@ void MainWindow::onCorpusDoubleClick(int row, int col)
     barChart->setData(data);
     barChart->plot();
     barChart->show();
-
 }
 
 void MainWindow::onThresholdClick()
@@ -313,9 +317,51 @@ void MainWindow::onThresholdClick()
     int th = value.toInt();
     corpora.threshold(th);
     ui->FrequencytableWidget->clear();
+}
+
+void MainWindow::onDiceClick()
+{
+    Metrics met;
+    vector <vector<float> > matrix;
+    QVector<QVector<float> > mat;
+
+    qDebug()<<"Dice";
+
+    matrix=met.generateDice(corpora);
+    matrix=met.negativeMatrix(matrix,1.0);
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+
+    mat.resize(matrix.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+      mat[i].resize(matrix[i].size());
+    }
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            mat[i][j]=matrix[i][j];
+        }
+    }
 
 
 
+    simGraph = new SimilarityGraph();
+    simGraph->setTitle("Dice Metric");
+    simGraph->setMat(mat);
+    simGraph->plot();
+    simGraph->show();
 }
 
 void MainWindow::initCorpusTable(int row, int col)

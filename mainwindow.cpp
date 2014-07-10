@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->DiceButton,SIGNAL(clicked()),this,SLOT(onDiceClick()));
     connect(ui->CosButton,SIGNAL(clicked()),this,SLOT(onCosClick()));
+    connect(ui->JaccardButton,SIGNAL(clicked()),this,SLOT(onJaccardClick()));
+    connect(ui->ManhattanButton,SIGNAL(clicked()),this,SLOT(onManhattanClick()));
 
 
 
@@ -77,6 +79,7 @@ void MainWindow::LoadStopWords()
 void MainWindow::load()
 {
     QString path;
+    QElapsedTimer timer;
     int reply;
 
 
@@ -98,15 +101,15 @@ void MainWindow::load()
 
     path=QFileDialog::getExistingDirectory(this,"Select Dir","./assets");
 
+    timer.start();
+
     if(!path.isEmpty())
     {
 
+
         //Extraer lista de directorios
         readDirList(path);
-
-
-        //Extraer archivos de la lista de directorios
-        //readFileListXml();
+        qDebug()<<timer.elapsed()/1000.0;
 
 
     }
@@ -151,7 +154,7 @@ void MainWindow::readDirList(QString path)
     //corpora.showCorporaFrequencyTable();
 
     //qDebug()<<corpora.getCorpora().at(0).getCorp().size();
-    corpora.getCorpora().at(0).showCorpusFrequencyTable();
+    //corpora.getCorpora().at(0).showCorpusFrequencyTable();
     initCorporaTable();
 
 }
@@ -336,11 +339,13 @@ void MainWindow::onDiceClick()
 
 
     qDebug()<<"Dice";
-
     matrix=met.generateDice(corpora);
+
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
+
 /*
+    qDebug()<<"Imprimiendo";
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -452,6 +457,133 @@ void MainWindow::onCosClick()
     simGraph->show();
 
 
+}
+
+void MainWindow::onJaccardClick()
+{
+    Metrics met;
+    vector <vector<float> > matrix;
+    QVector<QVector<float> > mat;
+
+    QElapsedTimer timer;
+    timer.start();
+
+
+    qDebug()<<"Jaccard";
+
+    matrix=met.generateJaccard(corpora);
+    qDebug()<<"Aplicando negativo";
+    matrix=met.negativeMatrix(matrix,1.0);
+/*
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+*/
+
+    mat.resize(matrix.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+      mat[i].resize(matrix[i].size());
+    }
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            mat[i][j]=matrix[i][j];
+        }
+    }
+
+    qint64 elapsed = timer.elapsed()/1000.0;
+
+    if(elapsed >= 60 )
+    {
+        elapsed/=60.0;
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+    }
+    else
+    {
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+    }
+
+    qDebug()<<"Graficando";
+    simGraph = new SimilarityGraph();
+    simGraph->setTitle("Jaccard Metric");
+    simGraph->setMat(mat);
+    simGraph->plot();
+    simGraph->show();
+
+}
+
+void MainWindow::onManhattanClick()
+{
+    Metrics met;
+    vector <vector<float> > matrix;
+    QVector<QVector<float> > mat;
+
+    QElapsedTimer timer;
+    timer.start();
+
+
+    qDebug()<<"Manhattan";
+
+    matrix=met.generateManhatan(corpora);
+
+    qDebug()<<"Normalizando";
+    matrix = met.normalizeMatrix(matrix);
+    //qDebug()<<"Aplicando negativo";
+    //matrix=met.negativeMatrix(matrix,1.0);
+
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+
+    mat.resize(matrix.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+      mat[i].resize(matrix[i].size());
+    }
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            mat[i][j]=matrix[i][j];
+        }
+    }
+
+    qint64 elapsed = timer.elapsed()/1000.0;
+
+    if(elapsed >= 60 )
+    {
+        elapsed/=60.0;
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+    }
+    else
+    {
+        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+    }
+
+    qDebug()<<"Graficando";
+    simGraph = new SimilarityGraph();
+    simGraph->setTitle("Manhattan Metric");
+    simGraph->setMat(mat);
+    simGraph->plot();
+    simGraph->show();
 }
 
 

@@ -40,6 +40,8 @@ public slots:
 
     void onDiceClick();
     void onCosClick();
+    void onJaccardClick();
+    void onManhattanClick();
 
 
 

@@ -105,9 +105,13 @@ public:
     vector < vector <float > > generateJaccard(Corpora c);
 
 
-    vector<vector<float> > multiplyByScalar(vector<vector<float> > mat , int scalar);
+    vector<vector<float> > multiplyByScalar(vector<vector<float> > mat , float scalar);
 
     vector<vector<float> > negativeMatrix(vector<vector<float> > mat , float val);
+
+    vector<vector<float> > normalizeMatrix(vector<vector<float> > mat);
+
+
 
 
 

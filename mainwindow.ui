@@ -135,6 +135,20 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Global Table</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Apply Metrics</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="DiceButton">
         <property name="text">
          <string>Dice</string>
@@ -145,6 +159,20 @@
        <widget class="QPushButton" name="CosButton">
         <property name="text">
          <string>Cosine</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="JaccardButton">
+        <property name="text">
+         <string>Jaccard</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="ManhattanButton">
+        <property name="text">
+         <string>Manhattan</string>
         </property>
        </widget>
       </item>

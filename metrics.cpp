@@ -95,7 +95,7 @@ vector<vector<float> > Metrics::transpose(vector<vector<float> > mat)
     return trans;
 }
 
-vector<vector<float> > Metrics::multiplyByScalar(vector<vector<float> > mat,int scalar)
+vector<vector<float> > Metrics::multiplyByScalar(vector<vector<float> > mat,float  scalar)
 {
     for(unsigned int i=0;i<mat.size();i++)
     {
@@ -118,6 +118,28 @@ vector<vector<float> > Metrics::negativeMatrix(vector<vector<float> > mat,float 
             mat[i][j]=val-mat[i][j];
         }
     }
+    return mat;
+}
+
+vector<vector<float> > Metrics::normalizeMatrix(vector<vector<float> > mat)
+{
+
+    //Obteniendo el valor maximo en la matriz
+
+    float maxVal=0;
+
+    for(unsigned int i=0;i<mat.size();i++)
+    {
+        for(unsigned int j=0;j<mat[0].size();j++)
+        {
+            if(mat[i][j]>maxVal)
+                maxVal = mat[i][j];
+        }
+    }
+
+
+    mat = multiplyByScalar(mat,static_cast<float>(1.0/(maxVal*1.0)));
+
     return mat;
 }
 
@@ -305,25 +327,30 @@ vector<vector<float> > Metrics::generateManhatan(Corpora c)
 {
     vector<Document> docs;
     vector<vector<float> > matrix;
+    float result;
+    unsigned int size;
+
 
     copyDocuments(&docs,c);
 
-    matrix.resize(docs.size());
+    matrix.resize(docs.size());    
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
         matrix[i].resize(docs.size());
     }
 
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            matrix[i][j]=manhatan(docs[i],docs[j]);
-        }
-    }
+    size=matrix.size();
 
-    //matrix = transpose(matrix);
+    for(unsigned int i=0;i<size;i++)
+    {
+        for(unsigned int j=i;j<size;j++)
+        {
+            result=manhatan(docs[i],docs[j]);
+            matrix[i][j]=result;
+            matrix[j][i]=result;
+        }
+    }    
 
 
     return matrix;
@@ -333,53 +360,62 @@ vector<vector<float> > Metrics::generateDice(Corpora c)
 {
     vector<Document> docs;
     vector<vector<float> > matrix;
+    float result;
+    unsigned int size;
 
     copyDocuments(&docs,c);
 
     matrix.resize(docs.size());
+
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
         matrix[i].resize(docs.size());
     }
 
-    for(unsigned int i=0;i<matrix.size();i++)
+
+    size=matrix.size();
+
+    for(unsigned int i=0;i<size;i++)
     {
-        for(unsigned int j=0;j<matrix.size();j++)
+        for(unsigned int j=i;j<size;j++)
         {
-            matrix[i][j]=dice(docs[i],docs[j]);
+            result=dice(docs[i],docs[j]);
+            matrix[i][j]=result;
+            matrix[j][i]=result;
         }
     }
 
-    //matrix = transpose(matrix);
-
-
     return matrix;
-
 }
 
 vector<vector<float> > Metrics::generateCos(Corpora c)
 {
     vector<Document> docs;
     vector<vector<float> > matrix;
+    float result;
+    unsigned int size;
 
     copyDocuments(&docs,c);
 
-    matrix.resize(docs.size());
+    matrix.resize(docs.size());    
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
         matrix[i].resize(docs.size());
     }
 
-    for(unsigned int i=0;i<matrix.size();i++)
+    size=matrix.size();
+
+    for(unsigned int i=0;i<size;i++)
     {
-        for(unsigned int j=0;j<matrix.size();j++)
+        for(unsigned int j=i;j<size;j++)
         {
-            matrix[i][j]=cosMetric(docs[i],docs[j]);
+            result=cosMetric(docs[i],docs[j]);
+            matrix[i][j]=result;
+            matrix[j][i]=result;
         }
     }
-
 
     return matrix;
 }
@@ -388,24 +424,29 @@ vector<vector<float> > Metrics::generateJaccard(Corpora c)
 {
     vector<Document> docs;
     vector<vector<float> > matrix;
+    float result;
+    unsigned int size;
 
     copyDocuments(&docs,c);
 
-    matrix.resize(docs.size());
+    matrix.resize(docs.size());    
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
         matrix[i].resize(docs.size());
     }
 
-    for(unsigned int i=0;i<matrix.size();i++)
+    size=matrix.size();
+
+    for(unsigned int i=0;i<size;i++)
     {
-        for(unsigned int j=0;j<matrix.size();j++)
+        for(unsigned int j=i;j<size;j++)
         {
-            matrix[i][j]=jaccard(docs[i],docs[j]);
+            result=jaccard(docs[i],docs[j]);
+            matrix[i][j]=result;
+            matrix[j][i]=result;
         }
     }
 
     return matrix;
-
 }

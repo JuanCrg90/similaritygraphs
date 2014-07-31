@@ -20,8 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->CorporaTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorporaClick(int,int)));
     connect(ui->CorporaTableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onCorporaDoubleClick(int,int)));
 
-    connect(ui->CorpusTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorpusClick(int,int)));
+    connect(ui->CorpusTableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(onCorpusClick(int,int)));    
     connect(ui->CorpusTableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(onCorpusDoubleClick(int,int)));
+
+    connect(ui->GlobalCorporaButton,SIGNAL(clicked()),this,SLOT(onGlobalClick()));
 
     connect(ui->ThresholdPushButton,SIGNAL(clicked()),this,SLOT(onThresholdClick()));
 
@@ -30,6 +32,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->CosButton,SIGNAL(clicked()),this,SLOT(onCosClick()));
     connect(ui->JaccardButton,SIGNAL(clicked()),this,SLOT(onJaccardClick()));
     connect(ui->ManhattanButton,SIGNAL(clicked()),this,SLOT(onManhattanClick()));
+
+
+    //Toolbar
+    connect(ui->actionClose,SIGNAL(triggered(bool)),this,SLOT(close()));
+    connect(ui->actionAbout,SIGNAL(triggered(bool)),this,SLOT(onAboutClick()));
+    connect(ui->actionXML_to_Dataset,SIGNAL(triggered(bool)),this,SLOT(onXMLreaderClick()));
 
 
 
@@ -70,7 +78,7 @@ void MainWindow::LoadStopWords()
     }
     else
     {
-        QMessageBox::information(this,"Message","No Stop sords selected");
+        QMessageBox::information(this,"Message","No Stop words selected");
     }
 
     qDebug()<<timer.elapsed()/1000.0;
@@ -320,6 +328,32 @@ void MainWindow::onCorpusDoubleClick(int row, int col)
     barChart->show();
 }
 
+void MainWindow::onGlobalClick()
+{
+    map<string, int> ft = corpora.getCorporaFrequencyTable();
+    std::map<string,int>::iterator it;
+    int i=0;
+
+    int size=ft.size();
+    ui->FrequencytableWidget->clear();
+    ui->FrequencytableWidget->setRowCount(size);
+    ui->FrequencytableWidget->setColumnCount(2);
+    ui->FrequencytableWidget->setHorizontalHeaderLabels(QStringList()<<"Word"<<"Frequency");
+    ui->FrequencytableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    it=ft.begin();
+
+    while(it!=ft.end())
+    {
+        ui->FrequencytableWidget->setItem(i,0,new QTableWidgetItem(QString::fromStdString(it->first)));
+        ui->FrequencytableWidget->setItem(i,1,new QTableWidgetItem(QString::number(it->second)));
+        it++;
+        i++;
+    }
+
+    ui->FrequencytableWidget->resizeColumnsToContents();
+}
+
 void MainWindow::onThresholdClick()
 {
     QString value = ui->ThresholdLineEdit->text();
@@ -376,11 +410,11 @@ void MainWindow::onDiceClick()
     if(elapsed >= 60 )
     {
         elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
     }
     else
     {
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
     }
 
     qDebug()<<"Graficando";
@@ -442,11 +476,11 @@ void MainWindow::onCosClick()
     if(elapsed >= 60 )
     {
         elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
     }
     else
     {
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
     }
 
     qDebug()<<"Graficando";
@@ -505,11 +539,11 @@ void MainWindow::onJaccardClick()
     if(elapsed >= 60 )
     {
         elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
     }
     else
     {
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
     }
 
     qDebug()<<"Graficando";
@@ -535,12 +569,12 @@ void MainWindow::onManhattanClick()
 
     matrix=met.generateManhatan(corpora);
 
-    qDebug()<<"Normalizando";
-    matrix = met.normalizeMatrix(matrix);
+    //qDebug()<<"Normalizando";
+    //matrix = met.normalizeMatrix(matrix);
     //qDebug()<<"Aplicando negativo";
     //matrix=met.negativeMatrix(matrix,1.0);
 
-
+/*
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -549,7 +583,7 @@ void MainWindow::onManhattanClick()
         }
         cout<<endl;
     }
-
+*/
 
     mat.resize(matrix.size());
 
@@ -571,11 +605,11 @@ void MainWindow::onManhattanClick()
     if(elapsed >= 60 )
     {
         elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" Minutes");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
     }
     else
     {
-        QMessageBox::information(this,"Message","Elapsed Time"+QString::number((elapsed))+" -Seconds");
+        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
     }
 
     qDebug()<<"Graficando";
@@ -584,6 +618,21 @@ void MainWindow::onManhattanClick()
     simGraph->setMat(mat);
     simGraph->plot();
     simGraph->show();
+}
+
+void MainWindow::onAboutClick()
+{
+    About *aboutWidget;
+    aboutWidget = new About();
+    aboutWidget->show();
+}
+
+void MainWindow::onXMLreaderClick()
+{
+    XLMParser *xmlwidget;
+    xmlwidget = new XLMParser();
+    xmlwidget->show();
+
 }
 
 

@@ -35,7 +35,8 @@ void Metrics::balance(map<string, int> &tf1, map<string, int> &tf2)
 
         if(it2==tf1.end())
         {
-            tf1.insert(pair<string,int> (it1->first,0));        }
+            tf1.insert(pair<string,int> (it1->first,0));
+        }
 
         it1++;
     }

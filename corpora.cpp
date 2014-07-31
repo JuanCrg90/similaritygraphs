@@ -82,6 +82,8 @@ void Corpora::threshold(int th)
         corpora[i].threshold(th);
     }
 
+    generateCorporaFrequencyTable();
+
 }
 
 void Corpora::clear()

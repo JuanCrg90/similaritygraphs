@@ -1,1 +1,6 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/assets/logos">
+        <file>assets/logos/LogoFimee.png</file>
+        <file>assets/logos/logo.png</file>
+    </qresource>
+</RCC>

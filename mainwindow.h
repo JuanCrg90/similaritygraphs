@@ -15,7 +15,8 @@
 #include "preprocesor.h"
 #include "barcharts.h"
 #include "similaritygraph.h"
-
+#include "about.h"
+#include "xlmparser.h"
 
 namespace Ui {
 class MainWindow;
@@ -35,6 +36,8 @@ public slots:
     void onCorpusClick(int row,int col);
     void onCorpusDoubleClick(int row,int col);
 
+    void onGlobalClick();
+
     void onThresholdClick();
 
 
@@ -42,6 +45,9 @@ public slots:
     void onCosClick();
     void onJaccardClick();
     void onManhattanClick();
+
+    void onAboutClick();
+    void onXMLreaderClick();
 
 
 

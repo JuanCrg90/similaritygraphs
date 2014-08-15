@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QXmlStreamReader>
+#include "preprocesor.h"
 
 
 
@@ -27,6 +28,7 @@ public:
 
 
 public slots:
+
     void onLoadClick();
 
 

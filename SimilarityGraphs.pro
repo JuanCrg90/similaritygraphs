@@ -55,7 +55,8 @@ FORMS    += mainwindow.ui \
     xlmparser.ui
 
 OTHER_FILES += \
-    assets/logos/LogoFimee.png
+    assets/logos/LogoFimee.png \
+    assets/fastTest.xml
 
 RESOURCES += \
     logos.qrc

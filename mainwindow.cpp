@@ -7,6 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+
+
+    this->setFixedSize(this->size());
+
     stopWords.clear();
 
     ui->CorporaTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);

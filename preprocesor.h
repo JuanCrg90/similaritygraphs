@@ -85,6 +85,22 @@ public:
     void removeHtmlTags();
 
     /**
+     * @brief removeIlegalAmp
+     * &[^(lt|gt|apos|amp|quot)]+
+     * [\S]&[\S|\s]
+     */
+    void removeIlegalAmp();
+
+    void removeHtmlTagsInXML();
+
+    /**
+     * @brief removeSpecialcharacters
+     * \032
+     */
+    void removeSpecialcharacters();
+
+
+    /**
      * @brief removeUrls
      */
     void removeUrls();

@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     MainWindow w;
+    //XLMParser w;
     w.show();
 
     return a.exec();

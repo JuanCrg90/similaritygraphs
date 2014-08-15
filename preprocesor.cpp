@@ -57,6 +57,53 @@ void Preprocesor::removeHtmlTags()
 
 }
 
+void Preprocesor::removeIlegalAmp()
+{
+    const regex rgx_url("&");
+    string blank(" ");
+
+    fullText=regex_replace(fullText,rgx_url,blank);
+}
+
+void Preprocesor::removeHtmlTagsInXML()
+{
+    const regex rgx_gt("&gt;");
+    string gt(" ");
+
+    const regex rgx_lt("&lt;");
+    string lt(" ");
+
+    const regex rgx_amp("&amp;");
+    string amp(" ");
+
+    const regex rgx_apos("&apos;");
+    string apos(" ");
+
+    const regex rgx_quot("&quot;");
+    string quot(" ");
+
+
+
+    //removiendo caracteres de xml
+
+    fullText=regex_replace(fullText,rgx_gt,gt);
+    fullText=regex_replace(fullText,rgx_lt,lt);
+    fullText=regex_replace(fullText,rgx_amp,amp);
+    fullText=regex_replace(fullText,rgx_apos,apos);
+    fullText=regex_replace(fullText,rgx_quot,quot);
+
+
+}
+
+void Preprocesor::removeSpecialcharacters()
+{
+    const regex rgx_url("\\032");
+    string blank(" ");
+
+    fullText=regex_replace(fullText,rgx_url,blank);
+}
+
+
 void Preprocesor::removeUrls()
 {
     const regex rgx_url("((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[\\-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9\\.\\-]+|(?:www\\.|[\\-;:&=\\+\\$,\\w]+@)[A-Za-z0-9\\.\\-]+)((?:\\/[\\+~%\\/\\.\\w\\-_]*)?\\?\?(?:[\\-\\+=&;%@\\.\\w_]*)#?(?:[\\.\\!\\/\\\\\\w]*))?)");

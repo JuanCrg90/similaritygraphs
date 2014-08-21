@@ -138,8 +138,11 @@ vector<vector<float> > Metrics::normalizeMatrix(vector<vector<float> > mat)
         }
     }
 
+    cout<<maxVal<<endl;
+    cout<<1.0/(maxVal*1.0)<<endl;
 
-    mat = multiplyByScalar(mat,static_cast<float>(1.0/(maxVal*1.0)));
+    //mat = multiplyByScalar(mat,static_cast<float>(1.0/(maxVal*1.0)));
+    mat = multiplyByScalar(mat,1.0/(maxVal*1.0));
 
     return mat;
 }
@@ -158,10 +161,13 @@ float Metrics::manhatan(Document d1, Document d2)
 
     balance(doci,docj);
 
+    //en caso de que ambos documentos esten vacios los saltamos    
+    if(doci.size() == 0 && docj.size() == 0) return 255;
+
+    //cout<<"Balanceados"<<doci.size()<<" "<<docj.size()<<endl;
+
     wki=doci.begin();
     wkj=docj.begin();
-
-
 
     for(unsigned int i=0;i<doci.size();i++)
     {
@@ -190,6 +196,11 @@ float Metrics::dice(Document d1, Document d2)
 
     balance(doci,docj);
 
+    //en caso de que ambos documentos esten vacios los saltamos
+    if(doci.size() == 0 && docj.size() == 0) return 0;
+
+    //cout<<"Balanceados"<<doci.size()<<" "<<docj.size()<<endl;
+
     wki = doci.begin();
     wkj = docj.begin();
 
@@ -197,7 +208,6 @@ float Metrics::dice(Document d1, Document d2)
     for(unsigned int i=0;i<doci.size();i++)
     {
         numerator += (wki->second * wkj->second);
-
         wki++;
         wkj++;
     }
@@ -219,9 +229,7 @@ float Metrics::dice(Document d1, Document d2)
 
     denominator = denX + denY;
 
-
     return static_cast<float>(numerator) / static_cast<float> (denominator);
-
 }
 
 float Metrics::cosMetric(Document d1, Document d2)
@@ -239,7 +247,12 @@ float Metrics::cosMetric(Document d1, Document d2)
     doci = d1.getFrequencyTable();
     docj = d2.getFrequencyTable();
 
-    balance(doci,docj);
+    balance(doci,docj);    
+
+    //en caso de que ambos documentos esten vacios los saltamos
+    if(doci.size() == 0 && docj.size() == 0) return 0;
+
+    //cout<<"Balanceados"<<doci.size()<<" "<<docj.size()<<endl;
 
     wki = doci.begin();
     wkj = docj.begin();
@@ -268,6 +281,8 @@ float Metrics::cosMetric(Document d1, Document d2)
 
     denominator = sqrt(static_cast<float>(denX * denY));
 
+    //Evitamos una división por 0
+    if(denominator==0) return 0;
 
     return static_cast<float>(numerator) / static_cast<float> (denominator);
 }
@@ -289,6 +304,11 @@ float Metrics::jaccard(Document d1, Document d2)
     docj = d2.getFrequencyTable();
 
     balance(doci,docj);
+
+
+    //en caso de que ambos documentos esten vacios los saltamos
+    if(doci.size() == 0 && docj.size() == 0) return 0;
+
 
     wki = doci.begin();
     wkj = docj.begin();
@@ -318,6 +338,9 @@ float Metrics::jaccard(Document d1, Document d2)
 
     denominator = denX + denY-denXY;
 
+    //Evitamos una división por 0
+    if(denominator==0) return 0;
+
 
     return static_cast<float>(numerator) / static_cast<float> (denominator);
 
@@ -334,7 +357,7 @@ vector<vector<float> > Metrics::generateManhatan(Corpora c)
 
     copyDocuments(&docs,c);
 
-    matrix.resize(docs.size());    
+    matrix.resize(docs.size());
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
@@ -347,11 +370,15 @@ vector<vector<float> > Metrics::generateManhatan(Corpora c)
     {
         for(unsigned int j=i;j<size;j++)
         {
-            result=manhatan(docs[i],docs[j]);
+            if(i==j)
+                result=0.0;
+            else
+                result=manhatan(docs[i],docs[j]);
+
             matrix[i][j]=result;
             matrix[j][i]=result;
         }
-    }    
+    }
 
 
     return matrix;
@@ -363,6 +390,8 @@ vector<vector<float> > Metrics::generateDice(Corpora c)
     vector<vector<float> > matrix;
     float result;
     unsigned int size;
+
+
 
     copyDocuments(&docs,c);
 
@@ -377,11 +406,16 @@ vector<vector<float> > Metrics::generateDice(Corpora c)
 
     size=matrix.size();
 
+
     for(unsigned int i=0;i<size;i++)
     {
         for(unsigned int j=i;j<size;j++)
         {
-            result=dice(docs[i],docs[j]);
+            if(i==j)
+                result=1.0;
+            else
+                result=dice(docs[i],docs[j]);
+
             matrix[i][j]=result;
             matrix[j][i]=result;
         }
@@ -399,7 +433,7 @@ vector<vector<float> > Metrics::generateCos(Corpora c)
 
     copyDocuments(&docs,c);
 
-    matrix.resize(docs.size());    
+    matrix.resize(docs.size());
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
@@ -412,7 +446,11 @@ vector<vector<float> > Metrics::generateCos(Corpora c)
     {
         for(unsigned int j=i;j<size;j++)
         {
-            result=cosMetric(docs[i],docs[j]);
+            if(i==j)
+                result=1.0;
+            else
+                result=cosMetric(docs[i],docs[j]);
+
             matrix[i][j]=result;
             matrix[j][i]=result;
         }
@@ -430,7 +468,7 @@ vector<vector<float> > Metrics::generateJaccard(Corpora c)
 
     copyDocuments(&docs,c);
 
-    matrix.resize(docs.size());    
+    matrix.resize(docs.size());
 
     for(unsigned int i=0;i<matrix.size();i++)
     {
@@ -443,7 +481,11 @@ vector<vector<float> > Metrics::generateJaccard(Corpora c)
     {
         for(unsigned int j=i;j<size;j++)
         {
-            result=jaccard(docs[i],docs[j]);
+            if(i==j)
+                result=1.0;
+            else
+                result=jaccard(docs[i],docs[j]);
+
             matrix[i][j]=result;
             matrix[j][i]=result;
         }

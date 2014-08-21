@@ -14,7 +14,7 @@ TEMPLATE = app
 LIBS+= -std=gnu++11
 
 
-LIBS+= -lboost_regex
+LIBS+= -lboost_regex -fopenmp
 
 QMAKE_CXXFLAGS += -std=c++0x
 

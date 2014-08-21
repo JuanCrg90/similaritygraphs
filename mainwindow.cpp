@@ -364,6 +364,7 @@ void MainWindow::onThresholdClick()
     QString value = ui->ThresholdLineEdit->text();
     int th = value.toInt();
     corpora.threshold(th);
+    corpora.threshold(th);
     ui->FrequencytableWidget->clear();
 }
 
@@ -450,7 +451,7 @@ void MainWindow::onCosClick()
     matrix=met.generateCos(corpora);
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
-/*
+
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -459,7 +460,7 @@ void MainWindow::onCosClick()
         }
         cout<<endl;
     }
-*/
+
 
     mat.resize(matrix.size());
 
@@ -513,7 +514,7 @@ void MainWindow::onJaccardClick()
     matrix=met.generateJaccard(corpora);
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
-/*
+
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -522,7 +523,7 @@ void MainWindow::onJaccardClick()
         }
         cout<<endl;
     }
-*/
+
 
     mat.resize(matrix.size());
 
@@ -574,12 +575,12 @@ void MainWindow::onManhattanClick()
 
     matrix=met.generateManhatan(corpora);
 
-    //qDebug()<<"Normalizando";
-    //matrix = met.normalizeMatrix(matrix);
+    qDebug()<<"Normalizando";
+    matrix = met.normalizeMatrix(matrix);
     //qDebug()<<"Aplicando negativo";
     //matrix=met.negativeMatrix(matrix,1.0);
 
-/*
+
     for(unsigned int i=0;i<matrix.size();i++)
     {
         for(unsigned int j=0;j<matrix.size();j++)
@@ -588,7 +589,7 @@ void MainWindow::onManhattanClick()
         }
         cout<<endl;
     }
-*/
+
 
     mat.resize(matrix.size());
 
@@ -676,19 +677,15 @@ void MainWindow::initCorpusFrequencyTable(int row, int col)
     ui->FrequencytableWidget->setHorizontalHeaderLabels(QStringList()<<"Word"<<"Frequency");
     ui->FrequencytableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-
-
     it=ft.begin();
 
     while(it!=ft.end())
     {
-
         ui->FrequencytableWidget->setItem(i,0,new QTableWidgetItem(QString::fromStdString(it->first)));
         ui->FrequencytableWidget->setItem(i,1,new QTableWidgetItem(QString::number(it->second)));
         it++;
         i++;
     }
-
 
     ui->FrequencytableWidget->resizeColumnsToContents();
 
@@ -707,13 +704,10 @@ void MainWindow::initDocumentFrequencyTable(int row, int col)
     ui->FrequencytableWidget->setHorizontalHeaderLabels(QStringList()<<"Word"<<"Frequency");
     ui->FrequencytableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-
-
     it=ft.begin();
 
     while(it!=ft.end())
     {
-
         ui->FrequencytableWidget->setItem(i,0,new QTableWidgetItem(QString::fromStdString(it->first)));
         ui->FrequencytableWidget->setItem(i,1,new QTableWidgetItem(QString::number(it->second)));
         it++;
@@ -721,6 +715,5 @@ void MainWindow::initDocumentFrequencyTable(int row, int col)
     }
 
     ui->FrequencytableWidget->resizeColumnsToContents();
-
 }
 

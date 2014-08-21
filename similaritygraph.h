@@ -38,6 +38,8 @@ private:
     int x,y;
     QVector < QVector <float> > mat;
 
+    void saveMatrix(QString path);
+
 
 
 

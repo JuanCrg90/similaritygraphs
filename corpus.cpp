@@ -158,7 +158,7 @@ void Corpus::threshold(int th)
         {
             if(it->second < th)
             {
-                auxiliarCorp.erase(it);
+                auxiliarCorp.erase(it);                                
             }
             it++;
         }

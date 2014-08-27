@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->ThresholdPushButton,SIGNAL(clicked()),this,SLOT(onThresholdClick()));
     connect(ui->SaveGlobalTablepushButton,SIGNAL(clicked()),this,SLOT(onSaveGlobalClick()));
+    connect(ui->SaveTableClasspushButton,SIGNAL(clicked()),this,SLOT(onSaveTablesClass()));
+    connect(ui->SaveAllpushButton,SIGNAL(clicked()),this,SLOT(onSaveAll()));
+
 
 
     connect(ui->DiceButton,SIGNAL(clicked()),this,SLOT(onDiceClick()));
@@ -403,30 +406,61 @@ void MainWindow::onGlobalClick()
 
 void MainWindow::onSaveGlobalClick()
 {
-    QString path;
+    QString path=QFileDialog::getSaveFileName(this,"Select Dir","./assets/untiled.csv",tr("csv (*.csv)"));;
     map<string, int> ft = corpora->getCorporaFrequencyTable();
     std::map<string,int>::iterator it;
 
-
-    path=QFileDialog::getSaveFileName(this,"Select Dir","./assets/untiled.csv",tr("csv (*.csv)"));
-
     QFile file( path );
 
-    if ( file.open(QIODevice::ReadWrite) )
+    saveTable(file,ft);
+}
+
+void MainWindow::onSaveTablesClass()
+{
+    QString path;
+    QFile file;
+
+    path=QFileDialog::getExistingDirectory(this,"Select Directory");
+
+    int size=dirStructure->dirNameList.size();
+
+    for(int i=0;i<size;i++)
     {
-        QTextStream out( &file );
+        file.setFileName(path+"/"+dirStructure->dirNameList[i]+".csv");
 
-        it=ft.begin();
+        map<string, int> ft = corpora->getCorpora().at(i).getCorpusFrequencyTable();
 
-        while(it!=ft.end())
-        {
-            out<<QString::fromStdString(it->first)<<","<<QString::number(it->second)<<endl;
-            it++;
+        saveTable(file,ft);
+    }
+}
 
-        }
+void MainWindow::onSaveAll()
+{
+    QString path;
+    map<string, int> ft;
+    QFile file;
+
+    path=QFileDialog::getExistingDirectory(this,"Select Directory");
+
+
+    int size=dirStructure->dirNameList.size();
+
+    for(int i=0;i<size;i++)
+    {
+        file.setFileName(path+"/"+dirStructure->dirNameList[i]+".csv");
+
+        ft = corpora->getCorpora().at(i).getCorpusFrequencyTable();
+
+        saveTable(file,ft);
     }
 
-    file.close();
+
+    ft = corpora->getCorporaFrequencyTable();
+
+
+    file.setFileName(path+"/Global.csv");
+
+    saveTable(file,ft);
 
 
 }
@@ -465,9 +499,6 @@ void MainWindow::onDiceClick()
     plotGraph(QString("Dice Metric"),elapsed,mat);
 
 }
-
-
-
 
 void MainWindow::onCosClick()
 {
@@ -557,8 +588,6 @@ void MainWindow::onXMLreaderClick()
     xmlwidget->show();
 
 }
-
-
 
 void MainWindow::initCorpusTable(int row, int col)
 {
@@ -664,6 +693,26 @@ void MainWindow::plotGraph(QString title, qint64 &elapsed, QVector<QVector<float
     simGraph->plot();
     simGraph->show();
 
+}
+
+void MainWindow::saveTable(QFile &file, map<string, int> &ft)
+{
+    std::map<string,int>::iterator it;
+
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream out( &file );
+
+        it=ft.begin();
+
+        while(it!=ft.end())
+        {
+            out<<QString::fromStdString(it->first)<<","<<QString::number(it->second)<<endl;
+            it++;
+        }
+    }
+
+    file.close();
 }
 
 

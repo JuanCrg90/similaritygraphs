@@ -102,6 +102,13 @@
          </layout>
         </item>
         <item>
+         <widget class="QPushButton" name="SaveAllpushButton">
+          <property name="text">
+           <string>Save Tables</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="SaveGlobalTablepushButton">
           <property name="text">
            <string>Save Global Table</string>
@@ -109,9 +116,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="SaveClassTablepushButton">
+         <widget class="QPushButton" name="SaveTableClasspushButton">
           <property name="text">
-           <string>Save Class Tables</string>
+           <string>Save Tables Class</string>
           </property>
          </widget>
         </item>

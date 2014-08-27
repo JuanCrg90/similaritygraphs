@@ -39,6 +39,8 @@ public slots:
     void onGlobalClick();
 
     void onSaveGlobalClick();
+    void onSaveTablesClass();
+    void onSaveAll();
 
 
 
@@ -95,6 +97,8 @@ private:
 
 
     Corpora *corpora;
+
+
     int actualClass;
 
     BarCharts *barChart;
@@ -114,6 +118,8 @@ private:
 
     void allocateAndCopy(vector <vector<float> > &matrix,QVector<QVector<float> > &mat );
     void plotGraph(QString title,qint64 &elapsed,QVector<QVector<float> > &mat);
+    void saveTable(QFile &file,map<string, int> &ft);
+
 
 
 

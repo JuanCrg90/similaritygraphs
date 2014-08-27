@@ -32,12 +32,14 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Classes</string>
-        </property>
-       </widget>
+      <item row="1" column="1">
+       <widget class="QTableWidget" name="CorpusTableWidget"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTableWidget" name="CorporaTableWidget"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QTableWidget" name="FrequencytableWidget"/>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="label_2">
@@ -46,12 +48,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QTableWidget" name="CorporaTableWidget"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QTableWidget" name="CorpusTableWidget"/>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -59,8 +55,12 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QTableWidget" name="FrequencytableWidget"/>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Classes</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -100,6 +100,20 @@
            </spacer>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="SaveGlobalTablepushButton">
+          <property name="text">
+           <string>Save Global Table</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="SaveClassTablepushButton">
+          <property name="text">
+           <string>Save Class Tables</string>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="verticalSpacer_2">

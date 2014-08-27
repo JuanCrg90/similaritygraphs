@@ -27,6 +27,9 @@ public:
 
     void plot();
 
+    qint64 getElapsed() const;
+    void setElapsed(const qint64 &value);
+
 public slots:
     void onSaveclick();
 
@@ -37,6 +40,7 @@ private:
     QString title;
     int x,y;
     QVector < QVector <float> > mat;
+    qint64 elapsed;
 
     void saveMatrix(QString path);
 

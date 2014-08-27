@@ -38,6 +38,10 @@ public slots:
 
     void onGlobalClick();
 
+    void onSaveGlobalClick();
+
+
+
     void onThresholdClick();
 
 
@@ -66,17 +70,31 @@ private:
 
 
     //Variables para seleccion del directorio donde estan las clases
-    QDir dir;
-    QStringList dirPathList; //Ruta completa de los directorios
-    QStringList dirNameList; //Nombre del directorio (nombre de la clase)
-    QFileInfoList dirList; //Información del directorio
+
+    class directoryStructure{
+    public:
+        QDir dir;
+        QStringList dirPathList; //Ruta completa de los directorios
+        QStringList dirNameList; //Nombre del directorio (nombre de la clase)
+        QFileInfoList dirList; //Información del directorio
+
+    };
+
+    directoryStructure *dirStructure;
 
 
     //Variables para extraer un subdirectorio
-    vector<QStringList> subDirFileList; //paths de los archivos en el subdirectorio
-    vector<QStringList> fileNameList; //nombres de los archivos en el subdirectorio
+    class subDirectoryStructure{
+    public:
+        vector<QStringList> subDirFileList; //paths de los archivos en el subdirectorio
+        vector<QStringList> fileNameList; //nombres de los archivos en el subdirectorio
+    };
 
-    Corpora corpora;
+    subDirectoryStructure *subDirStructure;
+
+
+
+    Corpora *corpora;
     int actualClass;
 
     BarCharts *barChart;
@@ -92,6 +110,19 @@ private:
     void initCorpusTable(int row,int col);
     void initCorpusFrequencyTable(int row,int col);
     void initDocumentFrequencyTable(int row,int col);
+
+
+    void allocateAndCopy(vector <vector<float> > &matrix,QVector<QVector<float> > &mat );
+    void plotGraph(QString title,qint64 &elapsed,QVector<QVector<float> > &mat);
+
+
+
+
+    //Designed For Debug the data
+    void printMatrixValues(vector <vector<float> > &matrix);
+
+
+
 
 };
 

@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setFixedSize(this->size());
 
     stopWords.clear();
+    dirStructure=new directoryStructure();
+    subDirStructure= new subDirectoryStructure();
+    corpora = new Corpora();
 
     ui->CorporaTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->CorpusTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -31,12 +34,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->GlobalCorporaButton,SIGNAL(clicked()),this,SLOT(onGlobalClick()));
 
     connect(ui->ThresholdPushButton,SIGNAL(clicked()),this,SLOT(onThresholdClick()));
+    connect(ui->SaveGlobalTablepushButton,SIGNAL(clicked()),this,SLOT(onSaveGlobalClick()));
 
 
     connect(ui->DiceButton,SIGNAL(clicked()),this,SLOT(onDiceClick()));
     connect(ui->CosButton,SIGNAL(clicked()),this,SLOT(onCosClick()));
     connect(ui->JaccardButton,SIGNAL(clicked()),this,SLOT(onJaccardClick()));
     connect(ui->ManhattanButton,SIGNAL(clicked()),this,SLOT(onManhattanClick()));
+
+
 
 
     //Toolbar
@@ -95,12 +101,44 @@ void MainWindow::load()
     QElapsedTimer timer;
     int reply;
 
+    ui->CorporaTableWidget->clear();
+    ui->CorpusTableWidget->clear();
+    ui->FrequencytableWidget->clear();
 
-    corpora.clear();
+    ui->CorporaTableWidget->clearContents();
+    ui->CorpusTableWidget->clearContents();
+    ui->FrequencytableWidget->clearContents();
 
+    ui->CorporaTableWidget->setRowCount(0);
+    ui->CorpusTableWidget->setRowCount(0);
+    ui->FrequencytableWidget->setRowCount(0);
+
+
+
+
+
+
+
+/*
+    corpora->clear();
     dirPathList.clear();
     dirNameList.clear();
-    dirList.clear();
+    dirList.clear();*/
+
+    if(dirStructure)
+        delete dirStructure;
+
+    if(subDirStructure)
+        delete subDirStructure;
+
+    if(corpora)
+        delete corpora;
+
+    dirStructure = new directoryStructure();
+    subDirStructure = new subDirectoryStructure();
+    corpora = new Corpora();
+
+
 
 
 
@@ -118,7 +156,6 @@ void MainWindow::load()
 
     if(!path.isEmpty())
     {
-
 
         //Extraer lista de directorios
         readDirList(path);
@@ -138,36 +175,40 @@ void MainWindow::readDirList(QString path)
 {
 
 
+    dirStructure->dir.setPath(path);
+    dirStructure->dirList.clear();
+    dirStructure->dirList = dirStructure->dir.entryInfoList(QDir::Dirs);
+
+    /*
     dir.setPath(path);
-
-
-    dirList.clear();
-
+    qDebug()<<dir.path();
+    dirList.clear();    
     dirList= dir.entryInfoList(QDir::Dirs);
+*/
 
-    //qDebug()<<dirList.size();
 
-    for(int i=0;i<dirList.size();i++)
+
+    for(int i=0;i<dirStructure->dirList.size();i++)
     {
-        if(dirList[i].fileName()!=".." && dirList[i].fileName()!=".")
+        if(dirStructure->dirList[i].fileName()!=".." && dirStructure->dirList[i].fileName()!=".")
         {
-            dirPathList.append(dirList[i].absoluteFilePath());
-            dirNameList.append(dirList[i].fileName());
+            dirStructure->dirPathList.append(dirStructure->dirList[i].absoluteFilePath());
+            dirStructure->dirNameList.append(dirStructure->dirList[i].fileName());
         }
     }
 
-    for(int i=0;i<dirPathList.size();i++)
+    for(int i=0;i<dirStructure->dirPathList.size();i++)
     {
         //qDebug()<<"Clase"<<i;
-        readFileList(dirPathList[i]);
+        readFileList(dirStructure->dirPathList[i]);
     }
 
 
-    corpora.generateCorporaFrequencyTable();
-    //corpora.showCorporaFrequencyTable();
+    corpora->generateCorporaFrequencyTable();
+    //corpora->showCorporaFrequencyTable();
 
-    //qDebug()<<corpora.getCorpora().at(0).getCorp().size();
-    //corpora.getCorpora().at(0).showCorpusFrequencyTable();
+    //qDebug()<<corpora->getCorpora().at(0).getCorp().size();
+    //corpora->getCorpora().at(0).showCorpusFrequencyTable();
     initCorporaTable();
 
 }
@@ -180,11 +221,12 @@ void MainWindow::readFileList(QString path)
     Corpus auxCorpus;
 
 
-    dir.setPath(path);
+
+    dirStructure->dir.setPath(path);
 
 
-    dir.setNameFilters(QStringList() << QString("*.txt"));
-    fileList=dir.entryInfoList(QDir::Files);
+    dirStructure->dir.setNameFilters(QStringList() << QString("*.txt"));
+    fileList=dirStructure->dir.entryInfoList(QDir::Files);
 
 
     for(int i=0;i<fileList.size();i++)
@@ -192,8 +234,8 @@ void MainWindow::readFileList(QString path)
         filePathlist.append(fileList[i].absoluteFilePath());
         tempNamelist.append(fileList[i].fileName());
     }
-    subDirFileList.push_back(filePathlist);
-    fileNameList.push_back(tempNamelist);
+    subDirStructure->subDirFileList.push_back(filePathlist);
+    subDirStructure->fileNameList.push_back(tempNamelist);
 
 
     //Construyendo la clase
@@ -209,7 +251,7 @@ void MainWindow::readFileList(QString path)
     //qDebug()<<"Termina Generación de tabla del corpus";
 
     //qDebug()<<"Agregando Corpus al corpora";
-    corpora.addCorpus(auxCorpus);
+    corpora->addCorpus(auxCorpus);
 
 }
 
@@ -247,15 +289,15 @@ Document MainWindow::readDoc(QString path,QString name)
 
 void MainWindow::initCorporaTable()
 {
-    ui->CorporaTableWidget->setRowCount(dirPathList.size());
+    ui->CorporaTableWidget->setRowCount(dirStructure->dirPathList.size());
     ui->CorporaTableWidget->setColumnCount(1);
     ui->CorporaTableWidget->setHorizontalHeaderLabels(QStringList()<<"Directory");
     ui->CorporaTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
 
-    for (int i = 0; i < dirPathList.size(); i++)
+    for (int i = 0; i < dirStructure->dirPathList.size(); i++)
     {
-        ui->CorporaTableWidget->setItem(i,0,new QTableWidgetItem(dirNameList[i]));
+        ui->CorporaTableWidget->setItem(i,0,new QTableWidgetItem(dirStructure->dirNameList[i]));
     }
 
     ui->CorporaTableWidget->resizeColumnsToContents();
@@ -274,7 +316,7 @@ void MainWindow::onCorporaDoubleClick(int row, int col)
 {
 
 
-    map<string, int> ft=corpora.getCorpora().at(row).getCorpusFrequencyTable();
+    map<string, int> ft=corpora->getCorpora().at(row).getCorpusFrequencyTable();
 
     QVector<QString> labels;
     QVector<int> data;
@@ -290,7 +332,7 @@ void MainWindow::onCorporaDoubleClick(int row, int col)
 
     barChart= new BarCharts();
 
-    barChart->setName(dirNameList[row]);
+    barChart->setName(dirStructure->dirNameList[row]);
     barChart->setLabels(labels);
     barChart->setData(data);
     barChart->plot();
@@ -309,7 +351,7 @@ void MainWindow::onCorpusClick(int row, int col)
 
 void MainWindow::onCorpusDoubleClick(int row, int col)
 {
-    map<string, int> ft = corpora.getCorpora().at(actualClass).getDocument(row).getFrequencyTable();
+    map<string, int> ft = corpora->getCorpora().at(actualClass).getDocument(row).getFrequencyTable();
 
     QVector<QString> labels;
     QVector<int> data;
@@ -326,7 +368,7 @@ void MainWindow::onCorpusDoubleClick(int row, int col)
     barChart= new BarCharts();
 
 
-    barChart->setName(fileNameList[actualClass][row]);
+    barChart->setName(subDirStructure->fileNameList[actualClass][row]);
     barChart->setLabels(labels);
     barChart->setData(data);
     barChart->plot();
@@ -335,7 +377,7 @@ void MainWindow::onCorpusDoubleClick(int row, int col)
 
 void MainWindow::onGlobalClick()
 {
-    map<string, int> ft = corpora.getCorporaFrequencyTable();
+    map<string, int> ft = corpora->getCorporaFrequencyTable();
     std::map<string,int>::iterator it;
     int i=0;
 
@@ -359,13 +401,45 @@ void MainWindow::onGlobalClick()
     ui->FrequencytableWidget->resizeColumnsToContents();
 }
 
+void MainWindow::onSaveGlobalClick()
+{
+    QString path;
+    map<string, int> ft = corpora->getCorporaFrequencyTable();
+    std::map<string,int>::iterator it;
+
+
+    path=QFileDialog::getSaveFileName(this,"Select Dir","./assets/untiled.csv",tr("csv (*.csv)"));
+
+    QFile file( path );
+
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream out( &file );
+
+        it=ft.begin();
+
+        while(it!=ft.end())
+        {
+            out<<QString::fromStdString(it->first)<<","<<QString::number(it->second)<<endl;
+            it++;
+
+        }
+    }
+
+    file.close();
+
+
+}
+
 void MainWindow::onThresholdClick()
 {
     QString value = ui->ThresholdLineEdit->text();
     int th = value.toInt();
-    corpora.threshold(th);
-    corpora.threshold(th);
+    corpora->threshold(th);
+    corpora->threshold(th);
     ui->FrequencytableWidget->clear();
+    ui->FrequencytableWidget->clearContents();
+    ui->FrequencytableWidget->setRowCount(0);
 }
 
 void MainWindow::onDiceClick()
@@ -377,59 +451,18 @@ void MainWindow::onDiceClick()
     QElapsedTimer timer;
     timer.start();
 
-
     qDebug()<<"Dice";
-    matrix=met.generateDice(corpora);
+    matrix=met.generateDice(*corpora);
 
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
 
-/*
-    qDebug()<<"Imprimiendo";
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-*/
+    printMatrixValues(matrix);
+    allocateAndCopy(matrix,mat);
 
-    mat.resize(matrix.size());
+    qint64 elapsed = timer.elapsed()/1000.0;    
 
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-      mat[i].resize(matrix[i].size());
-    }
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            mat[i][j]=matrix[i][j];
-        }
-    }
-
-    qint64 elapsed = timer.elapsed()/1000.0;
-
-    if(elapsed >= 60 )
-    {
-        elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
-    }
-    else
-    {
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
-    }
-
-    qDebug()<<"Graficando";
-    simGraph = new SimilarityGraph();
-    simGraph->setTitle("Dice Metric");
-    simGraph->setMat(mat);
-    simGraph->plot();
-    simGraph->show();
-
+    plotGraph(QString("Dice Metric"),elapsed,mat);
 
 }
 
@@ -448,54 +481,16 @@ void MainWindow::onCosClick()
 
     qDebug()<<"Cos";
 
-    matrix=met.generateCos(corpora);
+    matrix=met.generateCos(*corpora);
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
 
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-
-
-    mat.resize(matrix.size());
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-      mat[i].resize(matrix[i].size());
-    }
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            mat[i][j]=matrix[i][j];
-        }
-    }
+    printMatrixValues(matrix);
+    allocateAndCopy(matrix,mat);
 
     qint64 elapsed = timer.elapsed()/1000.0;
 
-    if(elapsed >= 60 )
-    {
-        elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
-    }
-    else
-    {
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
-    }
-
-    qDebug()<<"Graficando";
-    simGraph = new SimilarityGraph();
-    simGraph->setTitle("Cosine Metric");
-    simGraph->setMat(mat);
-    simGraph->plot();
-    simGraph->show();
-
+    plotGraph(QString("Cosine Metric"),elapsed,mat);
 
 }
 
@@ -510,54 +505,14 @@ void MainWindow::onJaccardClick()
 
 
     qDebug()<<"Jaccard";
-
-    matrix=met.generateJaccard(corpora);
+    matrix=met.generateJaccard(*corpora);
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
 
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-
-
-    mat.resize(matrix.size());
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-      mat[i].resize(matrix[i].size());
-    }
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            mat[i][j]=matrix[i][j];
-        }
-    }
-
+    printMatrixValues(matrix);
+    allocateAndCopy(matrix,mat);
     qint64 elapsed = timer.elapsed()/1000.0;
-
-    if(elapsed >= 60 )
-    {
-        elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
-    }
-    else
-    {
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
-    }
-
-    qDebug()<<"Graficando";
-    simGraph = new SimilarityGraph();
-    simGraph->setTitle("Jaccard Metric");
-    simGraph->setMat(mat);
-    simGraph->plot();
-    simGraph->show();
+    plotGraph(QString("Jaccard Metric"),elapsed,mat);
 
 }
 
@@ -573,57 +528,19 @@ void MainWindow::onManhattanClick()
 
     qDebug()<<"Manhattan";
 
-    matrix=met.generateManhatan(corpora);
+    matrix=met.generateManhatan(*corpora);
 
     qDebug()<<"Normalizando";
     matrix = met.normalizeMatrix(matrix);
     //qDebug()<<"Aplicando negativo";
     //matrix=met.negativeMatrix(matrix,1.0);
 
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-
-
-    mat.resize(matrix.size());
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-      mat[i].resize(matrix[i].size());
-    }
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        for(unsigned int j=0;j<matrix.size();j++)
-        {
-            mat[i][j]=matrix[i][j];
-        }
-    }
+    printMatrixValues(matrix);
+    allocateAndCopy(matrix,mat);
 
     qint64 elapsed = timer.elapsed()/1000.0;
 
-    if(elapsed >= 60 )
-    {
-        elapsed/=60.0;
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" Minutes");
-    }
-    else
-    {
-        QMessageBox::information(this,"Message","Elapsed Time "+QString::number((elapsed))+" -Seconds");
-    }
-
-    qDebug()<<"Graficando";
-    simGraph = new SimilarityGraph();
-    simGraph->setTitle("Manhattan Metric");
-    simGraph->setMat(mat);
-    simGraph->plot();
-    simGraph->show();
+    plotGraph(QString("Manhattan Metric"),elapsed,mat);
 }
 
 void MainWindow::onAboutClick()
@@ -647,17 +564,18 @@ void MainWindow::initCorpusTable(int row, int col)
 {
     //qDebug()<<row<<" "<<col;
 
-    int size=corpora.getCorpora().at(row).getCorp().size();
+    int size=corpora->getCorpora().at(row).getCorp().size();
 
-    ui->CorpusTableWidget->clear();
+    ui->CorpusTableWidget->clear();    
     ui->CorpusTableWidget->setRowCount(size);
+    qDebug()<<"Cantidad de archivos a mostrar en la lista"<<size;
     ui->CorpusTableWidget->setColumnCount(1);
     ui->CorpusTableWidget->setHorizontalHeaderLabels(QStringList()<<"Files");
     ui->CorpusTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     for (int i = 0; i < size; i++)
     {
-        ui->CorpusTableWidget->setItem(i,0,new QTableWidgetItem(fileNameList[row][i]));
+        ui->CorpusTableWidget->setItem(i,0,new QTableWidgetItem(subDirStructure->fileNameList[row][i]));
     }
     ui->CorpusTableWidget->resizeColumnsToContents();
 
@@ -666,7 +584,7 @@ void MainWindow::initCorpusTable(int row, int col)
 void MainWindow::initCorpusFrequencyTable(int row, int col)
 {
 
-    map<string, int> ft = corpora.getCorpora().at(row).getCorpusFrequencyTable();
+    map<string, int> ft = corpora->getCorpora().at(row).getCorpusFrequencyTable();
     std::map<string,int>::iterator it;
     int i=0;
 
@@ -693,7 +611,7 @@ void MainWindow::initCorpusFrequencyTable(int row, int col)
 
 void MainWindow::initDocumentFrequencyTable(int row, int col)
 {
-    map<string, int> ft = corpora.getCorpora().at(actualClass).getDocument(row).getFrequencyTable();
+    map<string, int> ft = corpora->getCorpora().at(actualClass).getDocument(row).getFrequencyTable();
     std::map<string,int>::iterator it;
     int i=0;
 
@@ -715,5 +633,51 @@ void MainWindow::initDocumentFrequencyTable(int row, int col)
     }
 
     ui->FrequencytableWidget->resizeColumnsToContents();
+}
+
+void MainWindow::allocateAndCopy(vector<vector<float> > &matrix, QVector<QVector<float> > &mat)
+{
+    mat.resize(matrix.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+      mat[i].resize(matrix[i].size());
+    }
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            mat[i][j]=matrix[i][j];
+        }
+    }
+}
+
+void MainWindow::plotGraph(QString title, qint64 &elapsed, QVector<QVector<float> > &mat)
+{
+
+    qDebug()<<"Graficando";
+    simGraph = new SimilarityGraph();
+    simGraph->setTitle(title);
+    simGraph->setElapsed(elapsed);
+    simGraph->setMat(mat);
+    simGraph->plot();
+    simGraph->show();
+
+}
+
+
+void MainWindow::printMatrixValues(vector<vector<float> > &matrix)
+{
+    qDebug()<<"Imprimiendo";
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        for(unsigned int j=0;j<matrix.size();j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
 }
 

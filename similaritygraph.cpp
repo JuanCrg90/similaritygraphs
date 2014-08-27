@@ -57,6 +57,18 @@ void SimilarityGraph::setMat(const QVector<QVector<float> > &value)
 void SimilarityGraph::plot()
 {
     this->setWindowTitle(title);
+
+
+    if(elapsed >= 60 )
+    {
+        elapsed/=60.0;
+        ui->Elapsedlabel->setText("Elapsed Time "+QString::number((elapsed))+" Minutes");
+    }
+    else
+    {
+        ui->Elapsedlabel->setText("Elapsed Time "+QString::number((elapsed))+" -Seconds");
+    }
+
     // configure axis rect:
     ui->Graph->setInteractions(QCP::iRangeDrag|QCP::iRangeZoom); // this will also allow rescaling the color scale by dragging/zooming
     ui->Graph->axisRect()->setupFullAxesBox(true);
@@ -117,6 +129,16 @@ void SimilarityGraph::onSaveclick()
     }
 
 }
+qint64 SimilarityGraph::getElapsed() const
+{
+    return elapsed;
+}
+
+void SimilarityGraph::setElapsed(const qint64 &value)
+{
+    elapsed = value;
+}
+
 
 void SimilarityGraph::saveMatrix(QString path)
 {

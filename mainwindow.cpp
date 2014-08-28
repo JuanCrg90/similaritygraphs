@@ -117,16 +117,10 @@ void MainWindow::load()
     ui->FrequencytableWidget->setRowCount(0);
 
 
+    ui->CorporaTableWidget->setHorizontalHeaderLabels(QStringList()<<"Directory");
+    ui->CorpusTableWidget->setHorizontalHeaderLabels(QStringList()<<"Files");
+    ui->FrequencytableWidget->setHorizontalHeaderLabels(QStringList()<<"Word"<<"Frequency");
 
-
-
-
-
-/*
-    corpora->clear();
-    dirPathList.clear();
-    dirNameList.clear();
-    dirList.clear();*/
 
     if(dirStructure)
         delete dirStructure;
@@ -140,10 +134,6 @@ void MainWindow::load()
     dirStructure = new directoryStructure();
     subDirStructure = new subDirectoryStructure();
     corpora = new Corpora();
-
-
-
-
 
     reply=QMessageBox::question(this,"Message","Do you want remove the Stop words?");
 
@@ -289,7 +279,6 @@ Document MainWindow::readDoc(QString path,QString name)
     return doc;
 }
 
-
 void MainWindow::initCorporaTable()
 {
     ui->CorporaTableWidget->setRowCount(dirStructure->dirPathList.size());
@@ -305,7 +294,6 @@ void MainWindow::initCorporaTable()
 
     ui->CorporaTableWidget->resizeColumnsToContents();
 }
-
 
 void MainWindow::onCorporaClick(int row, int col)
 {
@@ -340,10 +328,6 @@ void MainWindow::onCorporaDoubleClick(int row, int col)
     barChart->setData(data);
     barChart->plot();
     barChart->show();
-
-
-
-
 }
 
 void MainWindow::onCorpusClick(int row, int col)
@@ -474,24 +458,35 @@ void MainWindow::onThresholdClick()
     ui->FrequencytableWidget->clear();
     ui->FrequencytableWidget->clearContents();
     ui->FrequencytableWidget->setRowCount(0);
+    ui->FrequencytableWidget->setHorizontalHeaderLabels(QStringList()<<"Word"<<"Frequency");
 }
 
 void MainWindow::onDiceClick()
 {
     Metrics met;
     vector <vector<float> > matrix;
+    vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
 
     QElapsedTimer timer;
     timer.start();
 
     qDebug()<<"Dice";
-    matrix=met.generateDice(*corpora);
+    matrix=met.generateDice(*corpora,DOCS);
+    matrixClass=met.generateDice(*corpora,CLASS);
+
+
 
     qDebug()<<"Aplicando negativo";
-    matrix=met.negativeMatrix(matrix,1.0);
+    matrix=met.negativeMatrix(matrix,1.0);    
 
-    printMatrixValues(matrix);
+
+
+
+    //printMatrixValues(matrix);
+    printMatrixValues(matrixClass);
+
+
     allocateAndCopy(matrix,mat);
 
     qint64 elapsed = timer.elapsed()/1000.0;    
@@ -504,6 +499,7 @@ void MainWindow::onCosClick()
 {
     Metrics met;
     vector <vector<float> > matrix;
+    vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
 
     QElapsedTimer timer;
@@ -512,11 +508,14 @@ void MainWindow::onCosClick()
 
     qDebug()<<"Cos";
 
-    matrix=met.generateCos(*corpora);
+    matrix=met.generateCos(*corpora,DOCS);
+    matrixClass=met.generateCos(*corpora,CLASS);
+
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
 
-    printMatrixValues(matrix);
+    printMatrixValues(matrixClass);
+
     allocateAndCopy(matrix,mat);
 
     qint64 elapsed = timer.elapsed()/1000.0;
@@ -529,6 +528,7 @@ void MainWindow::onJaccardClick()
 {
     Metrics met;
     vector <vector<float> > matrix;
+    vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
 
     QElapsedTimer timer;
@@ -536,11 +536,13 @@ void MainWindow::onJaccardClick()
 
 
     qDebug()<<"Jaccard";
-    matrix=met.generateJaccard(*corpora);
+    matrix=met.generateJaccard(*corpora,DOCS);
+    matrixClass=met.generateJaccard(*corpora,CLASS);
+
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
 
-    printMatrixValues(matrix);
+    printMatrixValues(matrixClass);
     allocateAndCopy(matrix,mat);
     qint64 elapsed = timer.elapsed()/1000.0;
     plotGraph(QString("Jaccard Metric"),elapsed,mat);
@@ -551,6 +553,7 @@ void MainWindow::onManhattanClick()
 {
     Metrics met;
     vector <vector<float> > matrix;
+    vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
 
     QElapsedTimer timer;
@@ -559,14 +562,18 @@ void MainWindow::onManhattanClick()
 
     qDebug()<<"Manhattan";
 
-    matrix=met.generateManhatan(*corpora);
+    matrix=met.generateManhatan(*corpora,DOCS);
+    matrixClass=met.generateManhatan(*corpora,CLASS);
 
     qDebug()<<"Normalizando";
     matrix = met.normalizeMatrix(matrix);
-    //qDebug()<<"Aplicando negativo";
-    //matrix=met.negativeMatrix(matrix,1.0);
+    matrixClass = met.normalizeMatrix(matrixClass);
 
-    printMatrixValues(matrix);
+    //qDebug()<<"Aplicando negativo";
+    matrixClass=met.negativeMatrix(matrixClass,1.0);
+
+
+    printMatrixValues(matrixClass);
     allocateAndCopy(matrix,mat);
 
     qint64 elapsed = timer.elapsed()/1000.0;
@@ -596,8 +603,7 @@ void MainWindow::initCorpusTable(int row, int col)
     int size=corpora->getCorpora().at(row).getCorp().size();
 
     ui->CorpusTableWidget->clear();    
-    ui->CorpusTableWidget->setRowCount(size);
-    qDebug()<<"Cantidad de archivos a mostrar en la lista"<<size;
+    ui->CorpusTableWidget->setRowCount(size);    
     ui->CorpusTableWidget->setColumnCount(1);
     ui->CorpusTableWidget->setHorizontalHeaderLabels(QStringList()<<"Files");
     ui->CorpusTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);

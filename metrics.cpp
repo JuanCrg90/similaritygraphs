@@ -73,6 +73,15 @@ void Metrics::copyDocuments(vector<Document> *docs,Corpora c)
     }
 }
 
+void Metrics::copyfrecuencyTables(vector<map<string,int> > *fts, Corpora c)
+{
+    //Copiando las tablas de frecuencias
+    for(unsigned int i=0;i<c.getCorpora().size();i++)
+    {
+        fts->push_back(c.getCorpus(i).getCorpusFrequencyTable());
+    }
+}
+
 vector<vector<float> > Metrics::transpose(vector<vector<float> > mat)
 {
     vector<vector<float> > trans;
@@ -94,6 +103,77 @@ vector<vector<float> > Metrics::transpose(vector<vector<float> > mat)
     }
 
     return trans;
+}
+
+vector<vector<float> > Metrics::rotate(vector<vector<float> > mat)
+{
+    vector<vector<float> > rot;
+
+
+    rot.resize(mat.size());
+
+    for(unsigned int i=0;i<mat.size();i++)
+    {
+        rot[i].resize(mat.size());
+    }
+
+    /*
+     1 2 3      3 6 1
+     4 1 6  --> 2 1 8
+     7 8 1      1 4 7
+     */
+
+
+    for(unsigned int i=0;i<mat.size();i++)
+    {
+        for(unsigned int j=0;j<mat.size();j++)
+        {
+            rot[(mat.size()-1)-j][i]=mat[i][j];
+        }
+    }
+
+
+    return rot;
+
+
+}
+
+void Metrics::operationMode(int &mode, Corpora &c, vector<Document> &docs, vector<map<string, int> > &fts, vector<vector<float> > &matrix)
+{
+    switch (mode)
+    {
+    case DOCS:
+        copyDocsAndAllocate(c,docs,matrix);
+        break;
+    case CLASS:
+        copyFtsAndAllocate(c,fts,matrix);
+    default:
+        break;
+    }
+}
+
+void Metrics::copyDocsAndAllocate(Corpora &c,vector<Document> &docs, vector<vector<float> > &matrix)
+{
+    copyDocuments(&docs,c);
+
+    matrix.resize(docs.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        matrix[i].resize(docs.size());
+    }
+}
+
+void Metrics::copyFtsAndAllocate(Corpora &c, vector<map<string,int> > &fts, vector<vector<float> > &matrix)
+{
+    copyfrecuencyTables(&fts,c);
+
+    matrix.resize(fts.size());
+
+    for(unsigned int i=0;i<matrix.size();i++)
+    {
+        matrix[i].resize(fts.size());
+    }
 }
 
 vector<vector<float> > Metrics::multiplyByScalar(vector<vector<float> > mat,float  scalar)
@@ -138,8 +218,8 @@ vector<vector<float> > Metrics::normalizeMatrix(vector<vector<float> > mat)
         }
     }
 
-    cout<<maxVal<<endl;
-    cout<<1.0/(maxVal*1.0)<<endl;
+    //cout<<maxVal<<endl;
+    //cout<<1.0/(maxVal*1.0)<<endl;
 
     //mat = multiplyByScalar(mat,static_cast<float>(1.0/(maxVal*1.0)));
     mat = multiplyByScalar(mat,1.0/(maxVal*1.0));
@@ -151,17 +231,25 @@ float Metrics::manhatan(Document d1, Document d2)
 {
     map<string,int> doci; //Tabla de Frequencias del Corpus i
     map<string,int> docj; //Tabla de Frequencias del Corpus j
+
+    doci = d1.getFrequencyTable();
+    docj = d2.getFrequencyTable();
+
+    return manhatan(doci,docj);
+}
+
+float Metrics::manhatan(map<string, int> doci, map<string, int> docj)
+{
+
     std::map<string,int>::iterator wki;
     std::map<string,int>::iterator wkj;
 
     float dist=0.0;
 
-    doci = d1.getFrequencyTable();
-    docj = d2.getFrequencyTable();
 
     balance(doci,docj);
 
-    //en caso de que ambos documentos esten vacios los saltamos    
+    //en caso de que ambos documentos esten vacios los saltamos
     if(doci.size() == 0 && docj.size() == 0) return 255;
 
     //cout<<"Balanceados"<<doci.size()<<" "<<docj.size()<<endl;
@@ -177,12 +265,22 @@ float Metrics::manhatan(Document d1, Document d2)
     }
 
     return dist;
+
 }
 
 float Metrics::dice(Document d1, Document d2)
 {
     map<string,int> doci; //Tabla de Frequencias del Corpus i
     map<string,int> docj; //Tabla de Frequencias del Corpus j
+
+    doci = d1.getFrequencyTable();
+    docj = d2.getFrequencyTable();
+    return dice(doci,docj);
+}
+
+float Metrics::dice(map<string, int>  doci, map<string, int>  docj)
+{
+
     std::map<string,int>::iterator wki;
     std::map<string,int>::iterator wkj;
 
@@ -190,9 +288,6 @@ float Metrics::dice(Document d1, Document d2)
     float denominator=0.0;
     float denX=0.0;
     float denY=0.0;
-
-    doci = d1.getFrequencyTable();
-    docj = d2.getFrequencyTable();
 
     balance(doci,docj);
 
@@ -236,6 +331,14 @@ float Metrics::cosMetric(Document d1, Document d2)
 {
     map<string,int> doci; //Tabla de Frequencias del Corpus i
     map<string,int> docj; //Tabla de Frequencias del Corpus j
+
+    doci = d1.getFrequencyTable();
+    docj = d2.getFrequencyTable();
+    return cosMetric(doci,docj);
+}
+
+float Metrics::cosMetric(map<string, int>  doci, map<string, int>  docj)
+{
     std::map<string,int>::iterator wki;
     std::map<string,int>::iterator wkj;
 
@@ -244,10 +347,7 @@ float Metrics::cosMetric(Document d1, Document d2)
     float denX=0.0;
     float denY=0.0;
 
-    doci = d1.getFrequencyTable();
-    docj = d2.getFrequencyTable();
-
-    balance(doci,docj);    
+    balance(doci,docj);
 
     //en caso de que ambos documentos esten vacios los saltamos
     if(doci.size() == 0 && docj.size() == 0) return 0;
@@ -291,6 +391,16 @@ float Metrics::jaccard(Document d1, Document d2)
 {
     map<string,int> doci; //Tabla de Frequencias del Corpus i
     map<string,int> docj; //Tabla de Frequencias del Corpus j
+
+    doci = d1.getFrequencyTable();
+    docj = d2.getFrequencyTable();
+
+    return jaccard(doci,docj);
+}
+
+float Metrics::jaccard(map<string, int> doci, map<string, int> docj)
+{
+
     std::map<string,int>::iterator wki;
     std::map<string,int>::iterator wkj;
 
@@ -300,15 +410,11 @@ float Metrics::jaccard(Document d1, Document d2)
     float denY=0.0;
     float denXY=0.0;
 
-    doci = d1.getFrequencyTable();
-    docj = d2.getFrequencyTable();
 
     balance(doci,docj);
 
-
     //en caso de que ambos documentos esten vacios los saltamos
     if(doci.size() == 0 && docj.size() == 0) return 0;
-
 
     wki = doci.begin();
     wkj = docj.begin();
@@ -346,23 +452,15 @@ float Metrics::jaccard(Document d1, Document d2)
 
 }
 
-
-vector<vector<float> > Metrics::generateManhatan(Corpora c)
+vector<vector<float> > Metrics::generateManhatan(Corpora c,int mode)
 {
     vector<Document> docs;
+    vector<map<string,int> > fts;
     vector<vector<float> > matrix;
     float result;
     unsigned int size;
 
-
-    copyDocuments(&docs,c);
-
-    matrix.resize(docs.size());
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        matrix[i].resize(docs.size());
-    }
+    operationMode(mode,c,docs,fts,matrix);
 
     size=matrix.size();
 
@@ -373,72 +471,27 @@ vector<vector<float> > Metrics::generateManhatan(Corpora c)
             if(i==j)
                 result=0.0;
             else
-                result=manhatan(docs[i],docs[j]);
+                (mode==DOCS) ? result=manhatan(docs[i],docs[j]) : result=manhatan(fts[i],fts[j]);
 
             matrix[i][j]=result;
             matrix[j][i]=result;
         }
     }
 
+    if(mode==CLASS) matrix=rotate(matrix);
 
     return matrix;
 }
 
-vector<vector<float> > Metrics::generateDice(Corpora c)
+vector<vector<float> > Metrics::generateDice(Corpora c, int mode)
 {
     vector<Document> docs;
+    vector<map<string,int> > fts;
     vector<vector<float> > matrix;
     float result;
     unsigned int size;
 
-
-
-    copyDocuments(&docs,c);
-
-    matrix.resize(docs.size());
-
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        matrix[i].resize(docs.size());
-    }
-
-
-    size=matrix.size();
-
-
-    for(unsigned int i=0;i<size;i++)
-    {
-        for(unsigned int j=i;j<size;j++)
-        {
-            if(i==j)
-                result=1.0;
-            else
-                result=dice(docs[i],docs[j]);
-
-            matrix[i][j]=result;
-            matrix[j][i]=result;
-        }
-    }
-
-    return matrix;
-}
-
-vector<vector<float> > Metrics::generateCos(Corpora c)
-{
-    vector<Document> docs;
-    vector<vector<float> > matrix;
-    float result;
-    unsigned int size;
-
-    copyDocuments(&docs,c);
-
-    matrix.resize(docs.size());
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        matrix[i].resize(docs.size());
-    }
+    operationMode(mode,c,docs,fts,matrix);
 
     size=matrix.size();
 
@@ -449,31 +502,27 @@ vector<vector<float> > Metrics::generateCos(Corpora c)
             if(i==j)
                 result=1.0;
             else
-                result=cosMetric(docs[i],docs[j]);
+                (mode==DOCS) ? result=dice(docs[i],docs[j]) : result=dice(fts[i],fts[j]);
 
             matrix[i][j]=result;
             matrix[j][i]=result;
         }
     }
 
+    if(mode==CLASS) matrix=rotate(matrix);
+
     return matrix;
 }
 
-vector<vector<float> > Metrics::generateJaccard(Corpora c)
+vector<vector<float> > Metrics::generateCos(Corpora c,int mode)
 {
     vector<Document> docs;
+    vector<map<string,int> > fts;
     vector<vector<float> > matrix;
     float result;
     unsigned int size;
 
-    copyDocuments(&docs,c);
-
-    matrix.resize(docs.size());
-
-    for(unsigned int i=0;i<matrix.size();i++)
-    {
-        matrix[i].resize(docs.size());
-    }
+    operationMode(mode,c,docs,fts,matrix);
 
     size=matrix.size();
 
@@ -484,12 +533,44 @@ vector<vector<float> > Metrics::generateJaccard(Corpora c)
             if(i==j)
                 result=1.0;
             else
-                result=jaccard(docs[i],docs[j]);
+                (mode==DOCS) ? result=cosMetric(docs[i],docs[j]) : result=cosMetric(fts[i],fts[j]);
 
             matrix[i][j]=result;
             matrix[j][i]=result;
         }
     }
 
+    if(mode==CLASS) matrix=rotate(matrix);
+
+    return matrix;
+}
+
+vector<vector<float> > Metrics::generateJaccard(Corpora c,int mode)
+{
+    vector<Document> docs;
+    vector<map<string,int> > fts;
+    vector<vector<float> > matrix;
+    float result;
+    unsigned int size;
+
+    operationMode(mode,c,docs,fts,matrix);
+
+    size=matrix.size();
+
+    for(unsigned int i=0;i<size;i++)
+    {
+        for(unsigned int j=i;j<size;j++)
+        {
+            if(i==j)
+                result=1.0;
+            else
+                (mode==DOCS) ? result=jaccard(docs[i],docs[j]) : result=jaccard(fts[i],fts[j]);
+
+            matrix[i][j]=result;
+            matrix[j][i]=result;
+        }
+    }
+
+    if(mode==CLASS) matrix=rotate(matrix);
     return matrix;
 }

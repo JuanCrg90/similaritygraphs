@@ -467,6 +467,7 @@ void MainWindow::onDiceClick()
     vector <vector<float> > matrix;
     vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
+    QVector<QVector<float> > matClass;
 
     QElapsedTimer timer;
     timer.start();
@@ -484,14 +485,15 @@ void MainWindow::onDiceClick()
 
 
     //printMatrixValues(matrix);
-    printMatrixValues(matrixClass);
+    //printMatrixValues(matrixClass);
 
 
     allocateAndCopy(matrix,mat);
+    allocateAndCopy(matrixClass,matClass);
 
     qint64 elapsed = timer.elapsed()/1000.0;    
 
-    plotGraph(QString("Dice Metric"),elapsed,mat);
+    plotGraph(QString("Dice Metric"),elapsed,mat,matClass);
 
 }
 
@@ -501,6 +503,7 @@ void MainWindow::onCosClick()
     vector <vector<float> > matrix;
     vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
+    QVector<QVector<float> > matClass;
 
     QElapsedTimer timer;
     timer.start();
@@ -514,13 +517,14 @@ void MainWindow::onCosClick()
     qDebug()<<"Aplicando negativo";
     matrix=met.negativeMatrix(matrix,1.0);
 
-    printMatrixValues(matrixClass);
+    //printMatrixValues(matrixClass);
 
     allocateAndCopy(matrix,mat);
+    allocateAndCopy(matrixClass,matClass);
 
     qint64 elapsed = timer.elapsed()/1000.0;
 
-    plotGraph(QString("Cosine Metric"),elapsed,mat);
+    plotGraph(QString("Cosine Metric"),elapsed,mat,matClass);
 
 }
 
@@ -530,6 +534,7 @@ void MainWindow::onJaccardClick()
     vector <vector<float> > matrix;
     vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
+    QVector<QVector<float> > matClass;
 
     QElapsedTimer timer;
     timer.start();
@@ -544,8 +549,10 @@ void MainWindow::onJaccardClick()
 
     printMatrixValues(matrixClass);
     allocateAndCopy(matrix,mat);
+    allocateAndCopy(matrixClass,matClass);
+
     qint64 elapsed = timer.elapsed()/1000.0;
-    plotGraph(QString("Jaccard Metric"),elapsed,mat);
+    plotGraph(QString("Jaccard Metric"),elapsed,mat,matClass);
 
 }
 
@@ -555,6 +562,7 @@ void MainWindow::onManhattanClick()
     vector <vector<float> > matrix;
     vector <vector<float> > matrixClass;
     QVector<QVector<float> > mat;
+    QVector<QVector<float> > matClass;
 
     QElapsedTimer timer;
     timer.start();
@@ -573,12 +581,14 @@ void MainWindow::onManhattanClick()
     matrixClass=met.negativeMatrix(matrixClass,1.0);
 
 
-    printMatrixValues(matrixClass);
+    //printMatrixValues(matrixClass);
     allocateAndCopy(matrix,mat);
+    allocateAndCopy(matrixClass,matClass);
+
 
     qint64 elapsed = timer.elapsed()/1000.0;
 
-    plotGraph(QString("Manhattan Metric"),elapsed,mat);
+    plotGraph(QString("Manhattan Metric"),elapsed,mat,matClass);
 }
 
 void MainWindow::onAboutClick()
@@ -688,7 +698,7 @@ void MainWindow::allocateAndCopy(vector<vector<float> > &matrix, QVector<QVector
     }
 }
 
-void MainWindow::plotGraph(QString title, qint64 &elapsed, QVector<QVector<float> > &mat)
+void MainWindow::plotGraph(QString title, qint64 &elapsed, QVector<QVector<float> > &mat,QVector<QVector<float> > &matClass)
 {
 
     qDebug()<<"Graficando";
@@ -696,6 +706,8 @@ void MainWindow::plotGraph(QString title, qint64 &elapsed, QVector<QVector<float
     simGraph->setTitle(title);
     simGraph->setElapsed(elapsed);
     simGraph->setMat(mat);
+    simGraph->setMatClass(matClass);
+    simGraph->setDirNameList(dirStructure->dirNameList);
     simGraph->plot();
     simGraph->show();
 

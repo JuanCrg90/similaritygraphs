@@ -6,6 +6,7 @@
 #include <QtAlgorithms>
 
 #include "qcustomplot.h"
+#include "similaritymatrixclasses.h"
 
 namespace Ui {
 class SimilarityGraph;
@@ -30,17 +31,36 @@ public:
     qint64 getElapsed() const;
     void setElapsed(const qint64 &value);
 
+    QVector<QVector<float> > getMatClass() const;
+    void setMatClass(const QVector<QVector<float> > &value);
+
+    QStringList getDirNameList() const;
+    void setDirNameList(const QStringList &value);
+
 public slots:
     void onSaveclick();
+    void onConfusionclick();
 
 
 private:
     Ui::SimilarityGraph *ui;
 
+
+
     QString title;
     int x,y;
     QVector < QVector <float> > mat;
+    QVector < QVector <float> > matClass;
+
+    QStringList dirNameList;
+
+
     qint64 elapsed;
+
+
+
+
+    SimilarityMatrixClasses *confusion;
 
     void saveMatrix(QString path);
 

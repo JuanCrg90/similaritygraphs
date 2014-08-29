@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     qcustomplot.cpp \
     similaritygraph.cpp \
     about.cpp \
-    xlmparser.cpp
+    xlmparser.cpp \
+    similaritymatrixclasses.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     qcustomplot.h \
     similaritygraph.h \
     about.h \
-    xlmparser.h
+    xlmparser.h \
+    similaritymatrixclasses.h
     corpus.cpp
 
 
@@ -52,7 +54,8 @@ FORMS    += mainwindow.ui \
     barcharts.ui \
     similaritygraph.ui \
     about.ui \
-    xlmparser.ui
+    xlmparser.ui \
+    similaritymatrixclasses.ui
 
 OTHER_FILES += \
     assets/logos/LogoFimee.png \

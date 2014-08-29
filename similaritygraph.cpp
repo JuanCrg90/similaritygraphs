@@ -7,8 +7,11 @@ SimilarityGraph::SimilarityGraph(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    confusion = new SimilarityMatrixClasses();
+
 
     connect(ui->SaveButton,SIGNAL(clicked()),this,SLOT(onSaveclick()));
+    connect(ui->ConfusionMatrixpushButton,SIGNAL(clicked()),this,SLOT(onConfusionclick()));
 }
 
 SimilarityGraph::~SimilarityGraph()
@@ -50,8 +53,53 @@ void SimilarityGraph::setMat(const QVector<QVector<float> > &value)
             mat[i][j]=value[i][j];
         }
     }
+}
 
 
+QVector<QVector<float> > SimilarityGraph::getMatClass() const
+{
+    return matClass;
+}
+
+void SimilarityGraph::setMatClass(const QVector<QVector<float> > &value)
+{
+    matClass.clear();
+
+    matClass.resize(value.size());
+
+    for(int i=0;i<matClass.size();i++)
+    {
+        matClass[i].resize(value[i].size());
+    }
+
+    for(int i=0;i<matClass.size();i++)
+    {
+        for(int j=0;j<matClass[i].size();j++)
+        {
+            matClass[i][j]=value[i][j];
+        }
+    }
+}
+
+qint64 SimilarityGraph::getElapsed() const
+{
+    return elapsed;
+}
+
+void SimilarityGraph::setElapsed(const qint64 &value)
+{
+    elapsed = value;
+}
+
+
+QStringList SimilarityGraph::getDirNameList() const
+{
+    return dirNameList;
+}
+
+void SimilarityGraph::setDirNameList(const QStringList &value)
+{
+    dirNameList = value;
 }
 
 void SimilarityGraph::plot()
@@ -129,22 +177,29 @@ void SimilarityGraph::onSaveclick()
     }
 
 }
-qint64 SimilarityGraph::getElapsed() const
+
+void SimilarityGraph::onConfusionclick()
 {
-    return elapsed;
+    if(confusion)
+        delete confusion;
+    confusion = new SimilarityMatrixClasses();
+
+    confusion->setMatClass(matClass);
+    confusion->setDirNameList(dirNameList);
+
+    confusion->assingMatrix();
+
+    confusion->show();
+
+
 }
 
-void SimilarityGraph::setElapsed(const qint64 &value)
-{
-    elapsed = value;
-}
 
 
 void SimilarityGraph::saveMatrix(QString path)
 {
 
     QFile file( path+".csv" );
-
 
     if ( file.open(QIODevice::ReadWrite) )
     {

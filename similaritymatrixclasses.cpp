@@ -1,10 +1,6 @@
 #include "similaritymatrixclasses.h"
 #include "ui_similaritymatrixclasses.h"
 
-void SimilarityMatrixClasses::onSaveClick()
-{
-
-}
 
 SimilarityMatrixClasses::SimilarityMatrixClasses(QWidget *parent) :
     QDialog(parent),
@@ -13,6 +9,8 @@ SimilarityMatrixClasses::SimilarityMatrixClasses(QWidget *parent) :
     ui->setupUi(this);
 
     this->setWindowTitle("Confusión Matrix");
+
+    connect(ui->SavepushButton,SIGNAL(clicked()),this,SLOT(onSaveClick()));
 
 }
 
@@ -88,3 +86,31 @@ QStringList SimilarityMatrixClasses::copyReverse(QStringList &dirNameList)
 }
 
 
+void SimilarityMatrixClasses::onSaveClick()
+{
+
+    QString path=QFileDialog::getSaveFileName(this,"Select Dir","./assets/untiled.csv",tr("csv (*.csv)"));;
+
+    QFile file( path);
+
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream out( &file );
+
+        for(int i=0;i<matClass.size();i++)
+        {
+            for(int j=0;j<matClass[i].size();j++)
+            {
+                out<<matClass[i][j];
+
+                if(j<matClass[i].size()-1)
+                {
+                    out<<",";
+                }
+            }
+            out<<endl;
+        }
+    }
+
+    file.close();
+}

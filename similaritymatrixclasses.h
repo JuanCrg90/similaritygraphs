@@ -2,6 +2,12 @@
 #define SIMILARITYMATRIXCLASSES_H
 
 #include <QDialog>
+#include <QIODevice>
+#include <QFile>
+#include <QDir>
+#include <QDialog>
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QDebug>
 
 namespace Ui {
@@ -11,6 +17,9 @@ class SimilarityMatrixClasses;
 class SimilarityMatrixClasses : public QDialog
 {
     Q_OBJECT
+
+public slots:
+    void onSaveClick();
 
 public:
     explicit SimilarityMatrixClasses(QWidget *parent = 0);

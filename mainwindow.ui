@@ -102,27 +102,6 @@
          </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="SaveAllpushButton">
-          <property name="text">
-           <string>Save Tables</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="SaveGlobalTablepushButton">
-          <property name="text">
-           <string>Save Global Table</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="SaveTableClasspushButton">
-          <property name="text">
-           <string>Save Tables Class</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -162,7 +141,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item alignment="Qt::AlignHCenter">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Apply Metrics</string>
@@ -194,6 +173,34 @@
        <widget class="QPushButton" name="ManhattanButton">
         <property name="text">
          <string>Manhattan</string>
+        </property>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Save Words</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="SaveAllpushButton">
+        <property name="text">
+         <string>Save Tables</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="SaveGlobalTablepushButton">
+        <property name="text">
+         <string>Save Global Table</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="SaveTableClasspushButton">
+        <property name="text">
+         <string>Save Tables Class</string>
         </property>
        </widget>
       </item>

@@ -113,6 +113,13 @@ public:
     void removePunctiationMarks();
 
     /**
+     * @brief removeExtraChain
+     * :[\w\W]*
+     */
+    void removeExtraChain();
+
+
+    /**
      * @brief removeNumbers
      */
     void removeNumbers();

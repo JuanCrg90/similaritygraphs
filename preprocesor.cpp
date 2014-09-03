@@ -124,6 +124,15 @@ void Preprocesor::removePunctiationMarks()
 
 }
 
+void Preprocesor::removeExtraChain()
+{
+    const regex rgx_punctiation(":[\\w\\W]*");
+    string blank("");
+
+
+    fullText=regex_replace(fullText,rgx_punctiation,blank);
+}
+
 void Preprocesor::removeNumbers()
 {
     const regex rgx_numbers("(\\+|-)?[0-9]*(\\.([0-9][0-9]*)?)?((E|e)(\\+|-)?[0-9]+)?");

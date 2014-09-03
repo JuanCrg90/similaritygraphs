@@ -113,6 +113,12 @@ void XLMParser::onLoadClick()
                     }
 
 
+                    pre.setText(auxTitle.toStdString());
+                    pre.removeExtraChain();
+                    auxTitle=QString::fromStdString(pre.getText());
+
+
+
                     auxFile = new QFile("./assets/"+parts[0]+"/"+auxTitle+".txt");
 
                     if(auxFile->open(QIODevice::WriteOnly| QIODevice::Text))

@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->ThresholdPushButton,SIGNAL(clicked()),this,SLOT(onThresholdClick()));
     connect(ui->SaveGlobalTablepushButton,SIGNAL(clicked()),this,SLOT(onSaveGlobalClick()));
     connect(ui->SaveTableClasspushButton,SIGNAL(clicked()),this,SLOT(onSaveTablesClass()));
+    connect(ui->SaveDocspushButton,SIGNAL(clicked()),this,SLOT(onSaveDocuments()));
     connect(ui->SaveAllpushButton,SIGNAL(clicked()),this,SLOT(onSaveAll()));
 
 
@@ -418,17 +419,100 @@ void MainWindow::onSaveTablesClass()
     }
 }
 
+void MainWindow::onSaveDocuments()
+{
+    QString path;
+    QString newPath;
+    QString docPath;
+    QFile file;
+    map<string, int> ft;
+    unsigned int documentSize;
+    unsigned int size;
+
+    //Seleccionar directorio para crear los subDirectorios
+    path=QFileDialog::getExistingDirectory(this,"Select Directory");
+
+    //Crear Directorio DocumentFT
+    newPath =path+"/DocumentFT";
+    QDir().mkdir(newPath);
+
+    //Crear Directorios de las clases dentro de DocumentFT
+    size=dirStructure->dirNameList.size();
+
+    for(unsigned int i=0; i< size;i++ )
+    {
+        //qDebug()<<newPath+"/"+dirStructure->dirNameList[i];
+        QDir().mkdir(newPath+"/"+dirStructure->dirNameList[i]);
+
+        //Guardando Documentos correspondientes al Directorio creado
+        documentSize=corpora->getCorpus(i).getCorp().size();
+        for(unsigned int j=0;j<documentSize;j++)
+        {            
+            docPath = QString::fromStdString(corpora->getCorpus(i).getDocument(j).getName());
+
+            QStringList name=docPath.split(".");
+            docPath= name[0]+".csv";
+
+            //qDebug()<<newPath+"/"+dirStructure->dirNameList[i]+"/"+docPath;
+
+            file.setFileName(newPath+"/"+dirStructure->dirNameList[i]+"/"+docPath);
+            ft=corpora->getCorpus(i).getDocument(j).getFrequencyTable();
+            saveTable(file,ft);
+        }
+
+    }
+
+}
+
 void MainWindow::onSaveAll()
 {
     QString path;
+    QString newPath;
+    QString docPath;
     map<string, int> ft;
     QFile file;
+    unsigned int documentSize;
+    unsigned int size;
+
 
     path=QFileDialog::getExistingDirectory(this,"Select Directory");
 
 
-    int size=dirStructure->dirNameList.size();
+    size=dirStructure->dirNameList.size();
 
+    //Documentos
+
+    //Crear Directorio DocumentFT
+    newPath =path+"/DocumentFT";
+    QDir().mkdir(newPath);
+
+    for(unsigned int i=0; i< size;i++ )
+    {
+        //qDebug()<<newPath+"/"+dirStructure->dirNameList[i];
+        QDir().mkdir(newPath+"/"+dirStructure->dirNameList[i]);
+
+        //Guardando Documentos correspondientes al Directorio creado
+        documentSize=corpora->getCorpus(i).getCorp().size();
+        for(unsigned int j=0;j<documentSize;j++)
+        {
+            docPath = QString::fromStdString(corpora->getCorpus(i).getDocument(j).getName());
+
+            QStringList name=docPath.split(".");
+            docPath= name[0]+".csv";
+
+            //qDebug()<<newPath+"/"+dirStructure->dirNameList[i]+"/"+docPath;
+
+            file.setFileName(newPath+"/"+dirStructure->dirNameList[i]+"/"+docPath);
+            ft=corpora->getCorpus(i).getDocument(j).getFrequencyTable();
+            saveTable(file,ft);
+        }
+
+    }
+
+
+
+
+    //Guardando tablas  de las clases
     for(int i=0;i<size;i++)
     {
         file.setFileName(path+"/"+dirStructure->dirNameList[i]+".csv");
@@ -438,7 +522,7 @@ void MainWindow::onSaveAll()
         saveTable(file,ft);
     }
 
-
+    //Guardando  la tabla global del corpus
     ft = corpora->getCorporaFrequencyTable();
 
 

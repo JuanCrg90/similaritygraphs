@@ -509,9 +509,6 @@ void MainWindow::onSaveAll()
 
     }
 
-
-
-
     //Guardando tablas  de las clases
     for(int i=0;i<size;i++)
     {

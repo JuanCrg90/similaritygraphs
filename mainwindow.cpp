@@ -451,13 +451,16 @@ void MainWindow::onSaveDocuments()
             docPath = QString::fromStdString(corpora->getCorpus(i).getDocument(j).getName());
 
             QStringList name=docPath.split(".");
-            docPath= name[0]+".csv";
+            docPath= name[0]+".txt";
 
             //qDebug()<<newPath+"/"+dirStructure->dirNameList[i]+"/"+docPath;
 
             file.setFileName(newPath+"/"+dirStructure->dirNameList[i]+"/"+docPath);
             ft=corpora->getCorpus(i).getDocument(j).getFrequencyTable();
-            saveTable(file,ft);
+            //saveTable(file,ft);
+
+            if(ft.size()!=0)
+                saveDocument(file,ft);
         }
 
     }
@@ -810,6 +813,31 @@ void MainWindow::saveTable(QFile &file, map<string, int> &ft)
             it++;
         }
     }
+
+    file.close();
+}
+
+//Funcion auxiliar para salvar los documentos ya procesados
+void MainWindow::saveDocument(QFile &file, map<string, int> &ft)
+{
+    std::map<string,int>::iterator it;
+
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream out( &file );
+
+        it=ft.begin();
+
+        while(it!=ft.end())
+        {
+            out<<QString::fromStdString(it->first)<<" ";
+            it++;
+        }
+        out<<" "<<endl;
+    }
+
+
+
 
     file.close();
 }

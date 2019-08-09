@@ -8,7 +8,7 @@ SimilarityMatrixClasses::SimilarityMatrixClasses(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowTitle("Confusión Matrix");
+    this->setWindowTitle("Confusion Matrix");
 
     connect(ui->SavepushButton,SIGNAL(clicked()),this,SLOT(onSaveClick()));
 

@@ -16,6 +16,10 @@ LIBS+= -std=gnu++11
 
 LIBS+= -lboost_regex -fopenmp
 
+#Windows
+#LIBS+= -lboost_regex-mgw48-mt-1_56
+
+
 QMAKE_CXXFLAGS += -std=c++0x
 
 

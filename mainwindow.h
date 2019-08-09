@@ -40,6 +40,7 @@ public slots:
 
     void onSaveGlobalClick();
     void onSaveTablesClass();
+    void onSaveDocuments();
     void onSaveAll();
 
 
@@ -119,6 +120,8 @@ private:
     void allocateAndCopy(vector <vector<float> > &matrix,QVector<QVector<float> > &mat );
     void plotGraph(QString title, qint64 &elapsed, QVector<QVector<float> > &mat, QVector<QVector<float> > &matClass);
     void saveTable(QFile &file,map<string, int> &ft);
+    void saveDocument(QFile &file,map<string, int> &ft);
+
 
 
 
